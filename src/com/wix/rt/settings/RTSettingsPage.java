@@ -52,7 +52,6 @@ public class RTSettingsPage implements Configurable {
     private JLabel pathToRTBinLabel;
     private JLabel nodeInterpreterLabel;
     private JLabel versionLabel;
-    private JCheckBox useCommonJSOutputCheckBox;
     private JCheckBox groupController;
     private JRadioButton noneGlobalsRadioButton;
     private JRadioButton AMDRadioButton;
@@ -128,7 +127,7 @@ public class RTSettingsPage implements Configurable {
         nodeInterpreterField.setEnabled(enabled);
         pathToRTBinLabel.setEnabled(enabled);
         nodeInterpreterLabel.setEnabled(enabled);
-        useCommonJSOutputCheckBox.setEnabled(enabled);
+        modulesPanel.setEnabled(enabled);
     }
 
     private void validateField(List<ValidationInfo> errors, TextFieldWithHistoryWithBrowseButton field, boolean allowEmpty, String message) {

@@ -1,8 +1,8 @@
-<idea-plugin version="2" url="https://github.com/wix/react-templates">
+<idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
     <version>1.0.9</version>
-    <vendor email="sir_simon_x@yahoo.com" url="https://github.com/wix/react-templates">Wix</vendor>
+    <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok/react-templates-plugin">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
       React Templates integration.<br>
