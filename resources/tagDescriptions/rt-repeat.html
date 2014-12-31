@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<strong>rt-repeat</strong><br/>
+Repeats a node with its subtree for each item in an array. This is implemented by creating a method that is passed to a map call as a callback. It creates a real context for the iterated variable.
+The syntax is rt-repeat=\"itemVar in arrayExpr\". Within the scope of the element, itemVar will be available in javascript context, and also an itemVarIndex will be created to represent the index of the item.
+If the definition is myNum in this.getMyNumbers(), than there will be 2 variables in the scope: myNum and myNumIndex. This naming is used to allow nesting of repeat expression with access to all levels.
+
+<a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-repeat">Online documents</a><br/>
+
+<br/>
+<h2>Sample:</h2>
+<br/>
+
+<pre>
+    &lt;div rt-repeat=&quot;myNum in this.getMyNumbers()&quot;&gt;{myNumIndex}. {myNum}&lt;/div&gt;
+</pre>
+
+<h2>Compiled:</h2>
+<pre>
+define([
+    'react',
+    'lodash'
+], function (React, _) {
+    'use strict';
+    function repeatMyNum1(myNum, myNumIndex) {
+        return React.DOM.div({}, myNumIndex + '. ' + myNum);
+    }
+    return function () {
+        return _.map(this.getMyNumbers(), repeatMyNum1.bind(this));
+    };
+});
+</pre>
+</body>
+</html>

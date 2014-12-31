@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<strong>rt-if</strong><br/>
+This gives you the ability to add conditions to a sub-tree of html. If the condition is evaluated to true, the subtree will be returned, otherwise, it will not be calculated.<br/>
+It is implemented by a trinary expression.<br/>
+
+<a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-if">Online documents</a><br/>
+
+<h2>Sample:</h2>
+
+<pre>
+    &lt;div rt-if=&quot;this.state.resultCode === 200&quot;&gt;Success!&lt;/div&gt;
+</pre><br/>
+
+Compiled:<br/>
+<pre>
+define([
+    'react',
+    'lodash'
+], function (React, _) {
+    'use strict';
+    return function () {
+        return this.state.resultCode === 200 ? React.DOM.div({}, 'Success!') : null;
+    };
+});
+</pre>
+</body>
+</html>

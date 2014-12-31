@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<strong>rt-props</strong><br/>
+This directive is used to inject properties to an element programmatically. It will merge the properties with the properties received in the template.<br/>
+This option allows the code writer to build properties based on some app logic and pass them to the template.<br/>
+It is also useful when passing properties set on the component to an element within the template. The expected value of this attribute is an expression returning an object.<br/>
+The keys will be the properties and the values will be the property values.<br/>
+
+<a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-props">Online documents</a><br/>
+
+<br/>
+<h2>Sample:</h2>
+<br/>
+
+<pre>
+    &lt;input style=&quot;height:10px;width:3px;&quot; rt-props=&quot;{style:{width:'5px'},type:'text'}&quot;/&gt;<br/>
+</pre>
+
+<br/>
+<h2>Compiled:</h2>
+<pre>
+define([
+    'react',
+    'lodash'
+], function (React, _) {
+    'use strict';
+    return function () {
+        return React.DOM.input(_.merge({}, {
+            'style': {
+            height: '10px',
+            width: '3px'
+            }
+        }, {
+            style: { width: '5px' },
+            type: 'text'
+        }));
+};
+</pre>
+</body>
+</html>

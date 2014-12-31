@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<strong>rt-class</strong><br/>
+In order to reduce the boiler-plate code when pragmatically setting class names, you can use the rt-class directive.
+It expects to get a JSON object with keys as class names, and a value of true or false as the value. If the value is true, the class name will be included.
+Please note the following:
+<ol>
+    <li>In react templates, you can use the "class" attribute the same as you'd do in html. If you like, you can even have execution context within</li>
+    <li>You cannot use class and rt-class on the same html element.</li>
+</ol>
+
+<a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-class">Online documents</a><br/>
+
+<h2>Sample:</h2>
+
+<pre>
+    &lt;div rt-scope=&quot;{blue: true, selected: this.isSelected()} as classes&quot;&gt;<br/>
+    These are logically equivalent<br/>
+    &lt;div rt-class=&quot;classes&quot;&gt;Reference&lt;/div&gt;<br/>
+    &lt;div rt-class=&quot;{blue: true, selected: this.isSelected()}&quot;&gt;Inline&lt;/div&gt;<br/>
+    &lt;div class=&quot;blue{this.isSelected() ? ' selected' : ''}&quot;&gt;Using the class attribute&lt;/div&gt;<br/>
+    &lt;/div&gt;
+</pre><br/>
+
+<strong>Compiled:</strong><br/>
+<pre>
+define([
+    'react',
+    'lodash'
+], function (React, _) {
+    'use strict';
+    function scopeClasses1(classes) {
+        return React.DOM.div({}, 'These are logically equivalent', React.DOM.div({ 'className': React.addons.classSet(classes) }, 'Reference'), React.DOM.div({
+            'className': React.addons.classSet({
+                blue: true,
+                selected: this.isSelected()
+            })
+        }, 'Inline'), React.DOM.div({ 'className': 'blue' + this.isSelected() ? ' selected' : '' }, 'Using the class attribute'));
+    }
+    return function () {
+        return scopeClasses1.apply(this, [
+            {
+                blue: true,
+                selected: this.isSelected()
+            }
+        ]);
+    };
+});
+</pre>
+</body>
+</html>

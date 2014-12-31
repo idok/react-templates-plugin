@@ -1,0 +1,104 @@
+<idea-plugin version="2" url="https://github.com/wix/react-templates">
+    <id>com.wix.react-templates</id>
+    <name>React-Templates</name>
+    <version>1.0.9</version>
+    <vendor email="sir_simon_x@yahoo.com" url="https://github.com/wix/react-templates">Wix</vendor>
+    <category>HTML/JavaScript Development</category>
+    <description><![CDATA[
+      React Templates integration.<br>
+      <p>Add new React Templates file type for *.rt files</p>
+      <p>Build rt files on the fly</p>
+      <p>Inspect rt files</p>
+      <p>Completion for rt-* attributes</p>
+      <p>Completion for react attributes</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+       <p>1.0.9 add modules support for react-templates 0.1.5</p>
+       <p>1.0.8 add react attributes to code completion, fix temp files issue</p>
+       <p>1.0.7 improved error handling</p>
+       <p>1.0.6 Bug fixes. fix sort issue</p>
+       <p>1.0.5 Bug fixes.</p>
+       <p>1.0.4 Add new RT file.</p>
+       <p>1.0.3 Add quick docs for rt-* attributes.</p>
+       <p>1.0.2 Add option to build common JS output.</p>
+       <p>1.0.1 Add rt.js files as child nodes.</p>
+       <p>1.0.0 First version.</p>
+    ]]></change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends>JavaScript</depends>
+    <!--<depends optional="true" config-file="file-watcher-support.xml">com.intellij.plugins.watcher</depends>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <projectService serviceImplementation="com.wix.rt.settings.Settings"/>
+        <projectConfigurable instance="com.wix.rt.settings.RTSettingsPage"/>
+
+        <projectService serviceImplementation="com.wix.rt.build.RTFileListener"/>
+        <fileTypeFactory implementation="com.wix.rt.build.RTFileTypeFactory"/>
+
+        <completion.contributor language="HTML" implementationClass="com.wix.rt.codeInsight.PropertyCompletionContributor"/>
+        <xml.attributeDescriptorsProvider implementation="com.wix.rt.codeInsight.RTAttributeDescriptorsProvider" order="first"/>
+        <xml.elementDescriptorProvider implementation="com.wix.rt.codeInsight.RTTagDescriptorsProvider" order="last"/>
+        <xml.util.htmlDoctypeProvider implementation="com.wix.rt.codeInsight.RTDocTypeProvider" order="first"/>
+        <xml.xmlExtension implementation="com.wix.rt.codeInsight.RTHtmlExtension" order="first"/>
+
+        <!--<html.embeddedTokenTypesProvider implementation="com.wix.rt.RTEmbeddedTokenTypesProvider" />-->
+
+        <treeStructureProvider implementation="com.wix.rt.projectView.RTMergerTreeStructureProvider" />
+        <refactoring.moveHandler implementation="com.wix.rt.projectView.RTMoveProvider"/>
+        <renameHandler implementation="com.wix.rt.projectView.RTRenameHandler"/>
+
+        <lang.documentationProvider language="HTML" implementationClass="com.wix.rt.RTDocumentationProvider" />
+        <!--<fileBasedIndex implementation="com.wix.rt.index.AngularDirectivesDocIndex"/>-->
+        <!--<fileBasedIndex implementation="com.wix.rt.index.RTFileIndex"/>-->
+
+        <!--<errorHandler implementation="com.intellij.diagnostic.ITNReporter" />-->
+
+        <internalFileTemplate subject="New RT File template" name="RT File" />
+
+        <localInspection language="HTML" groupPath="JavaScript" shortName="RTInspection"
+                         enabledByDefault="true" level="ERROR"
+                         bundle="com.wix.rt.RTBundle"
+                         implementationClass="com.wix.rt.inspection.RTInspection"
+                         displayName="React Templates" groupKey="rt.inspection.group.name"/>
+        <!--unfair="true" runForWholeFile="true" level="WARNING" -->
+        <externalAnnotator language="HTML" implementationClass="com.wix.rt.inspection.RTExternalAnnotator" />
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+        <component>
+            <implementation-class>com.wix.rt.RTProjectComponent</implementation-class>
+        </component>
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="com.wix.rt" class="com.wix.rt.actions.BuildTemplateAction" text="Build React Template" icon="/icons/fileTypes/rt.png"
+                description="Build React Template">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+        <group id="com.wix.rt.NewActions">
+            <separator/>
+            <action id="com.wix.rt.NewRT" class="com.wix.rt.actions.CreateRTAction" />
+            <!--<action id="com.wix.rt.NewRT2" class="com.wix.rt.actions.CreateDartFileAction" />-->
+            <add-to-group anchor="after" group-id="NewGroup" relative-to-action="NewFromTemplate"/>
+        </group>
+    </actions>
+
+</idea-plugin>
