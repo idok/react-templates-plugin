@@ -55,7 +55,7 @@ Icon
 node_modules
 coverage
 target
-build
+/build
 npm-debug.log
 
 temp
