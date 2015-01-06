@@ -6,6 +6,7 @@ React-Templates plugin for WebStorm, PHPStorm and other Idea family IDE, provide
 * Support for react-templates file types
 * Automatically generate the javascript files from react-templates files 
 * Group rt file with generated js file
+* Create a new RT file with controller
 
 ## Getting started ##
 ### Prerequisites ###
@@ -32,6 +33,23 @@ To get started, you need to set the react-templates plugin settings:<br/>
 * Select output modules system (AMD/CommonJS/Globals)
 * Select whether to group controller file with rt and rt.js files  
 
+
+Configuration:<br/>
+![React-Templates config](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/settings.png)
+
+
+New RT File:<br/>
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/newFileMenu.png)
+
+<br/>
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/newRTFile.png)
+
+
+RT Attributes completion:<br/>
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/rt-props-completion.png)
+
+RT Attributes quick docs:<br/>
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/quick-docs.png)
 
 ### A Note to contributors ###
 react-templates plugin uses the code from [here](https://github.com/idok/scss-lint-plugin/tree/master/intellij-common) as a module, to run the project you need to clone that project as well.
