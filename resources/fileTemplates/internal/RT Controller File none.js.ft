@@ -1,0 +1,9 @@
+var $name$ = (function () {
+    'use strict';
+    return React.createClass({
+        displayName: '$name$',
+        render: function () {
+            return $name$RT.apply(this);
+        }
+    });
+}());

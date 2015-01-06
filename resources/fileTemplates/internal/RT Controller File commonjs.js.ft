@@ -1,0 +1,9 @@
+'use strict';
+var React = require('react');
+var _ = require('lodash');
+var template = require('./$name$.rt');
+
+module.exports = React.createClass({
+    displayName: '$name$',
+    render: template
+});

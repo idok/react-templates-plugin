@@ -18,6 +18,10 @@ public class Settings implements PersistentStateComponent<Settings> {
     public boolean pluginEnabled;
     public String modules = RTRunner.AMD;
     public boolean groupController;
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public boolean commonJS;
 
     protected Project project;
