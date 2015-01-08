@@ -5,39 +5,36 @@
     <title></title>
 </head>
 <body>
-<strong>rt-scope</strong><br/>
-This directive creates a new javascript scope. It actually creates a new method for this scope, and calls it with its current context. <br/>
-The syntax is rt-scope="expr1 as var1; expr2 as var2. This gives a convenience method to shorten stuff up in a scope and make the code more readable.<br/>
-It also helps to execute an expression only once in a scope instead of every chunk that needs it.<br/>
+<strong>rt-require</strong><br/>
+In many cases, you'd like to use either external code or other components within your template. <br/>
+An rt-require tag lets you include dependencies: &lt;rt-require dependency=&quot;depVarPath&quot; as=&quot;depVarName&quot;/&gt;.<br/>
+Once included, depVarName will be in scope. You can only use rt-require tags at the beginning of your template. <br/>
+When including React components, they can be referred to by their tag name inside a template. <br/>
+For example, &lt;MySlider prop1=&quot;val1&quot; onMyChange=&quot;{this.onSliderMoved}&quot;&gt;. <br/>
+Nesting is also supported: &lt;MyContainer&gt;&lt;div&gt;child&lt;/div&gt;&lt;div&gt;another&lt;/div&gt;&lt;/MyContainer&gt;. Children are accessible from this.props.children.<br/>
 
 <a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-scope">Online documents</a><br/>
 
 <h2>Sample:</h2>
 
 <pre>
-    &lt;div&nbsp;rt-repeat=&quot;rpt&nbsp;in&nbsp;array&quot;&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;rt-scope=&quot;')'&nbsp;as&nbsp;separator;&nbsp;rpt.val&nbsp;as&nbsp;val&quot;&gt;{rptIndex}{separator}&nbsp;{val}&lt;/div&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;'rpt'&nbsp;exists&nbsp;here,&nbsp;but&nbsp;not&nbsp;'separator'&nbsp;and&nbsp;'val'&lt;/div&gt;<br/>&lt;/div&gt;
+&lt;rt-require&nbsp;dependency=&quot;comps/myComp&quot;&nbsp;as=&quot;MyComp&quot;/&gt;<br/>&lt;rt-require&nbsp;dependency=&quot;utils/utils&quot;&nbsp;as=&quot;utils&quot;/&gt;<br/>&lt;MyComp&nbsp;rt-repeat=&quot;item&nbsp;in&nbsp;items&quot;&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;{utils.toLower(item.name)}&lt;/div&gt;<br/>&lt;/MyComp&gt;
 </pre>
 
 <h2>Compiled:</h2>
 <pre>
 define([
-    'react',
-    'lodash'
-], function (React, _) {
+    'react/addons',
+    'lodash',
+    'comps/myComp',
+    'utils/utils'
+], function (React, _, MyComp, utils) {
     'use strict';
-    function scopeSeparatorVal1(rpt, rptIndex, separator, val) {
-        return React.DOM.div({}, rptIndex + separator + ' ' + val);
-    }
-    function repeatRpt2(rpt, rptIndex) {
-        return React.DOM.div({}, scopeSeparatorVal1.apply(this, [
-            rpt,
-            rptIndex,
-            ')',
-            rpt.val
-        ]), React.DOM.div({}, '\'rpt\' exists here, but not \'separator\' and \'val\''));
+    function repeatItem1(item, itemIndex) {
+        return React.createElement(MyComp, {}, React.createElement('div', {}, utils.toLower(item.name)));
     }
     return function () {
-        return _.map(array, repeatRpt2.bind(this));
+        return _.map(items, repeatItem1.bind(this));
     };
 });
 </pre>

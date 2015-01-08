@@ -6,9 +6,9 @@
 </head>
 <body>
 <strong>rt-repeat</strong><br/>
-Repeats a node with its subtree for each item in an array. This is implemented by creating a method that is passed to a map call as a callback. It creates a real context for the iterated variable.
-The syntax is rt-repeat=\"itemVar in arrayExpr\". Within the scope of the element, itemVar will be available in javascript context, and also an itemVarIndex will be created to represent the index of the item.
-If the definition is myNum in this.getMyNumbers(), than there will be 2 variables in the scope: myNum and myNumIndex. This naming is used to allow nesting of repeat expression with access to all levels.
+Repeats a DOM node with its subtree for each item in an array. <br/>
+The syntax is rt-repeat="itemVar in arrayExpr", where the element, itemVar, will be available in JavaScript context, and an itemVarIndex will be created to represent the index of the item.<br/>
+By using this naming scheme, repeated expressions have access to all levels of nesting.<br/>
 
 <a href="https://github.com/wix/react-templates/blob/gh-pages/README.md#rt-repeat">Online documents</a><br/>
 
