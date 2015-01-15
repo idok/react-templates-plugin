@@ -108,7 +108,7 @@ public class RTFileListener {
             @Override
             public void run() {
 //                final ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
-                Task.Backgroundable task = new Task.Backgroundable(project, "compile rt", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
+                Task.Backgroundable task = new Task.Backgroundable(project, "Compile RT", true, PerformInBackgroundOption.ALWAYS_BACKGROUND) {
                     @Override
                     public void run(@NotNull ProgressIndicator indicator) {
                         try {
