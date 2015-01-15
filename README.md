@@ -35,21 +35,21 @@ To get started, you need to set the react-templates plugin settings:<br/>
 
 
 Configuration:<br/>
-![React-Templates config](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/settings.png)
+![React-Templates config](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/settings.png)
 
 
 New RT File:<br/>
-![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/newFileMenu.png)
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/newFileMenu.png)
 
 <br/>
-![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/newRTFile.png)
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/newRTFile.png)
 
 
 RT Attributes completion:<br/>
-![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/rt-props-completion.png)
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/rt-props-completion.png)
 
 RT Attributes quick docs:<br/>
-![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/doc/quick-docs.png)
+![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/quick-docs.png)
 
 ### A Note to contributors ###
 react-templates plugin uses the code from [here](https://github.com/idok/scss-lint-plugin/tree/master/intellij-common) as a module, to run the project you need to clone that project as well.
