@@ -10,4 +10,6 @@ public class VerifyMessage {
     public int line;
     public int column;
     public int index;
+    public int startOffset;
+    public int endOffset;
 }

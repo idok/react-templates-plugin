@@ -15,7 +15,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.settings.Settings;
-import com.wix.rt.utils.RTRunner;
+import com.wix.rt.cli.RTRunner;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

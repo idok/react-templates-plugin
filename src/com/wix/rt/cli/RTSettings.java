@@ -1,4 +1,4 @@
-package com.wix.rt.utils;
+package com.wix.rt.cli;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class RTSettings {
     public String modules;
     public boolean dryRun;
 
-    public static RTSettings build(@NotNull String cwd, @NotNull String path, @NotNull String nodeInterpreter, @NotNull String rtBin, @NotNull String modules, boolean dryRun) {
+    public static RTSettings build(@NotNull String cwd, @NotNull String nodeInterpreter, @NotNull String rtBin, @NotNull String path, @NotNull String modules, boolean dryRun) {
         RTSettings settings = new RTSettings();
         settings.cwd = cwd;
         settings.rtExecutablePath = rtBin;
@@ -25,5 +25,9 @@ public class RTSettings {
         settings.modules = modules;
         settings.dryRun = dryRun;
         return settings;
+    }
+
+    public static RTSettings build(@NotNull String cwd, @NotNull String nodeInterpreter, @NotNull String rtBin) {
+        return build(cwd, nodeInterpreter, rtBin, "", "", false);
     }
 }

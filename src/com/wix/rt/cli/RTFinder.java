@@ -1,4 +1,4 @@
-package com.wix.rt.utils;
+package com.wix.rt.cli;
 
 import com.intellij.execution.configurations.PathEnvironmentVariableUtil;
 import com.intellij.openapi.util.SystemInfo;

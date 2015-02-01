@@ -1,4 +1,4 @@
-package com.wix.rt.utils;
+package com.wix.rt.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,7 +39,7 @@ public final class RTRunner {
     }
 
     public static Result build(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
-        RTSettings settings = RTSettings.build(cwd, path, node, rtBin, modules, false);
+        RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, false);
         Result result = new Result();
         try {
             ProcessOutput output = RTRunner.convertFile(settings);
@@ -52,8 +52,25 @@ public final class RTRunner {
         return result;
     }
 
+    //rt --list-target-version -f json
+    public static Result listVersion(@NotNull String cwd, @NotNull String node, @NotNull String rtBin) {
+        RTSettings settings = RTSettings.build(cwd, node, rtBin);
+        Result result = new Result();
+        try {
+            GeneralCommandLine commandLine = RTCliBuilder.createCommandLineLint(settings);
+            commandLine.addParameter("--force");
+            ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
+            result.warns = parse(output.getStdout());
+        } catch (ExecutionException e) {
+            LOG.warn("Could not build react-templates file", e);
+            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, NotificationType.WARNING);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static Result compile(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
-        RTSettings settings = RTSettings.build(cwd, path, node, rtBin, modules, true);
+        RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, true);
         Result result = new Result();
         try {
             GeneralCommandLine commandLine = RTCliBuilder.createCommandLineLint(settings);

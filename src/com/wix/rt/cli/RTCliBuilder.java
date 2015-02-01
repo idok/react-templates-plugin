@@ -1,10 +1,8 @@
-package com.wix.rt.utils;
+package com.wix.rt.cli;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.wix.nodejs.NodeRunner;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * build cli command for RT
@@ -13,6 +11,15 @@ import java.io.File;
 final class RTCliBuilder {
 
     private RTCliBuilder() {
+    }
+
+    @NotNull
+    static GeneralCommandLine listVersions(@NotNull RTSettings settings) {
+        GeneralCommandLine commandLine = createCommandLine(settings);
+        commandLine.addParameter("--list-target-version");
+        commandLine.addParameter("--format");
+        commandLine.addParameter("json");
+        return commandLine;
     }
 
     @NotNull
