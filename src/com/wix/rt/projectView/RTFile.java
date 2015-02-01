@@ -11,11 +11,13 @@ public class RTFile implements Navigatable {
 
     //    private final Collection<PsiFile> myFormFiles;
     private final PsiFile rtFile;
+    private final PsiFile controller;
     private final PsiFile rtJSFile;
 
-    public RTFile(PsiFile rtFile, PsiFile rtJSFile) {
+    public RTFile(PsiFile rtFile, PsiFile rtJSFile, PsiFile controller) {
         this.rtFile = rtFile;
         this.rtJSFile = rtJSFile;
+        this.controller = controller;
 //        myFormFiles = FormClassIndex.findFormsBoundToClass(classToBind);
     }
 
@@ -24,17 +26,11 @@ public class RTFile implements Navigatable {
 //        myFormFiles = new HashSet<PsiFile>(formFiles);
 //    }
 
-    public boolean equals(Object object) {
-        if (object instanceof RTFile) {
-            RTFile form = (RTFile) object;
-            return rtFile.equals(form.rtFile) && rtJSFile.equals(form.rtJSFile);
-        } else {
-            return false;
+    private static boolean areEqual(Object a, Object b) {
+        if (a == null) {
+            return b == null;
         }
-    }
-
-    public int hashCode() {
-        return rtFile.hashCode() ^ rtJSFile.hashCode();
+        return a.equals(b);
     }
 
     public String getName() {
@@ -45,7 +41,49 @@ public class RTFile implements Navigatable {
         return rtJSFile;
     }
 
-//    public PsiFile[] getFormFiles() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RTFile rtFile1 = (RTFile) o;
+
+        if (controller != null ? !controller.equals(rtFile1.controller) : rtFile1.controller != null) return false;
+        if (rtFile != null ? !rtFile.equals(rtFile1.rtFile) : rtFile1.rtFile != null) return false;
+        if (rtJSFile != null ? !rtJSFile.equals(rtFile1.rtJSFile) : rtFile1.rtJSFile != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = rtFile != null ? rtFile.hashCode() : 0;
+        result = 31 * result + (controller != null ? controller.hashCode() : 0);
+        result = 31 * result + (rtJSFile != null ? rtJSFile.hashCode() : 0);
+        return result;
+    }
+
+//    public boolean equals(Object object) {
+//        if (object instanceof RTFile) {
+//            RTFile form = (RTFile) object;
+//            return rtFile.equals(form.rtFile) && rtJSFile.equals(form.rtJSFile) && areEqual(controller, form.controller);
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//    public int hashCode() {
+//        if (controller == null) {
+//            return rtFile.hashCode() ^ rtJSFile.hashCode();
+//        }
+//        return rtFile.hashCode() ^ rtJSFile.hashCode() ^ controller.hashCode();
+//    }
+
+    public PsiFile getController() {
+        return controller;
+    }
+
+    //    public PsiFile[] getFormFiles() {
 //        return PsiUtilCore.toPsiFileArray(rtFile);
 //    }
 
@@ -85,7 +123,8 @@ public class RTFile implements Navigatable {
 //                return false;
 //            }
 //        }
-        return rtFile.isValid() && rtJSFile.isValid();
+        boolean controllerValid = controller == null || controller.isValid();
+        return rtFile.isValid() && rtJSFile.isValid() && controllerValid;
     }
 
     public boolean containsFile(final VirtualFile vFile) {

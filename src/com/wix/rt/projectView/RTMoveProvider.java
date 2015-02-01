@@ -32,7 +32,7 @@ import java.util.Set;
  * @author yole
  */
 public class RTMoveProvider extends MoveHandlerDelegate {
-    private static final Logger LOG = Logger.getInstance("#com.intellij.uiDesigner.projectView.FormMoveProvider");
+    private static final Logger LOG = Logger.getInstance("#com.wix.rt.projectView.RTMoveProvider");
 
     @Override
     public boolean canMove(DataContext dataContext) {
@@ -56,6 +56,7 @@ public class RTMoveProvider extends MoveHandlerDelegate {
         if (rtFiles == null || rtFiles.length == 0) return;
         PsiFile[] jsToMove = new PsiFile[rtFiles.length];
         PsiFile[] filesToMove = new PsiFile[rtFiles.length];
+        PsiFile[] controllersToMove = new PsiFile[rtFiles.length];
         for (int i = 0; i < rtFiles.length; i++) {
             jsToMove[i] = rtFiles[i].getRTJSFile();
             if (jsToMove[i] != null) {
@@ -64,6 +65,10 @@ public class RTMoveProvider extends MoveHandlerDelegate {
             filesToMove[i] = rtFiles[i].getRtFile();
             if (filesToMove[i] != null) {
                 filesOrDirs.add(filesToMove[i]);
+            }
+            controllersToMove[i] = rtFiles[i].getController();
+            if (filesToMove[i] != null) {
+                filesOrDirs.add(controllersToMove[i]);
             }
         }
     }

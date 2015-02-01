@@ -39,9 +39,9 @@ import java.util.Set;
 public class RTNode extends ProjectViewNode<RTFile> {
     private final Collection<BasePsiNode<? extends PsiFile>> children;
 
-    public RTNode(Project project, Object value, ViewSettings viewSettings) {
-        this(project, (RTFile) value, viewSettings, getChildren(project, (RTFile) value, viewSettings));
-    }
+//    public RTNode(Project project, Object value, ViewSettings viewSettings) {
+//        this(project, (RTFile) value, viewSettings, getChildren(project, (RTFile) value, viewSettings));
+//    }
 
     public RTNode(Project project, RTFile value, ViewSettings viewSettings, Collection<BasePsiNode<? extends PsiFile>> children) {
         super(project, value, viewSettings);
@@ -68,7 +68,7 @@ public class RTNode extends ProjectViewNode<RTFile> {
     }
 
     public boolean contains(@NotNull VirtualFile file) {
-        for (final AbstractTreeNode child : children) {
+        for (final BasePsiNode<? extends PsiFile> child : children) {
             ProjectViewNode treeNode = (ProjectViewNode) child;
             if (treeNode.contains(file)) return true;
         }
@@ -125,20 +125,23 @@ public class RTNode extends ProjectViewNode<RTFile> {
         return false;
     }
 
-    public static AbstractTreeNode constructFormNode(final PsiFile rtJSFile, final Project project, final ViewSettings settings) {
-        final RTFile form = new RTFile(null, rtJSFile);
-        final Collection<BasePsiNode<? extends PsiFile>> children = getChildren(project, form, settings);
-        return new RTNode(project, form, settings, children);
-    }
+//    public static AbstractTreeNode constructFormNode(final PsiFile rtJSFile, final Project project, final ViewSettings settings) {
+//        final RTFile form = new RTFile(null, rtJSFile, null);
+//        final Collection<BasePsiNode<? extends PsiFile>> children = getChildren(project, form, settings);
+//        return new RTNode(project, form, settings, children);
+//    }
 
-    private static Collection<BasePsiNode<? extends PsiFile>> getChildren(final Project project, final RTFile form, final ViewSettings settings) {
-        final Set<BasePsiNode<? extends PsiFile>> children = new LinkedHashSet<BasePsiNode<? extends PsiFile>>();
-//        children.add(new ClassTreeNode(project, form.getRTJSFile(), settings));
-        children.add(new PsiFileNode(project, form.getRTJSFile(), settings));
-//        for (PsiFile formBoundToClass : form.getFormFiles()) {
-//            children.add(new PsiFileNode(project, formBoundToClass, settings));
+//    private static Collection<BasePsiNode<? extends PsiFile>> getChildren(final Project project, final RTFile form, final ViewSettings settings) {
+//        final Set<BasePsiNode<? extends PsiFile>> children = new LinkedHashSet<BasePsiNode<? extends PsiFile>>();
+////        children.add(new ClassTreeNode(project, form.getRTJSFile(), settings));
+//        children.add(new PsiFileNode(project, form.getRTJSFile(), settings));
+////        for (PsiFile formBoundToClass : form.getFormFiles()) {
+////            children.add(new PsiFileNode(project, formBoundToClass, settings));
+////        }
+//        children.add(new PsiFileNode(project, form.getRtFile(), settings));
+//        if (form.getController() != null) {
+//            children.add(new PsiFileNode(project, form.getController(), settings));
 //        }
-        children.add(new PsiFileNode(project, form.getRtFile(), settings));
-        return children;
-    }
+//        return children;
+//    }
 }

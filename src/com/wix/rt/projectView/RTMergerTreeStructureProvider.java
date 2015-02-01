@@ -1,21 +1,8 @@
-/*
- * Copyright 2000-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.wix.rt.projectView;
 
-import com.intellij.ide.DeleteProvider;
+import com.intellij.codeInsight.editorActions.PasteHandler;
+import com.intellij.designer.clipboard.SimpleTransferable;
+import com.intellij.ide.*;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.TreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
@@ -25,20 +12,30 @@ import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.uiDesigner.SerializedComponentData;
 import com.intellij.util.containers.ContainerUtil;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
+import org.intellij.images.editor.ImageDocument;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 
-public class RTMergerTreeStructureProvider implements TreeStructureProvider {
+public class RTMergerTreeStructureProvider implements TreeStructureProvider, DumbAware {
     private final Project project;
 
     public RTMergerTreeStructureProvider(Project project) {
@@ -72,7 +69,7 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
         return rtJsFiles;
     }
 
-    private boolean isGroupController() {
+    private static boolean isGroupController(Project project) {
         RTProjectComponent comp = project.getComponent(RTProjectComponent.class);
         return comp.settings.groupController;
     }
@@ -87,8 +84,11 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
 
     @NotNull
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
+        if (!RTProjectComponent.isEnabled(parent.getProject())) {
+            return children;
+        }
         if (parent.getValue() instanceof RTFile) return children;
-        boolean groupController = isGroupController();
+        boolean groupController = isGroupController(project);
 
         // Optimization. Check if there are any forms at all.
         boolean formsFound = hasRTFiles(children);
@@ -99,7 +99,7 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
 
         Map<String, ProjectViewNode> rtJsFiles = map(copy);
 
-        for (ProjectViewNode element : copy) {
+        for (ProjectViewNode<?> element : copy) {
 //            if (isRTJSFile(element.getVirtualFile())) {
 //                //skip
 //                continue;
@@ -139,15 +139,17 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
                 subNodes.add((BasePsiNode<? extends PsiFile>) element);
                 //noinspection unchecked
                 subNodes.add((BasePsiNode<? extends PsiFile>) rtJsNode);
+                ProjectViewNode controllerNode = null;
                 if (groupController) {
                     String name = getControllerName(element.getVirtualFile());
                     if (rtJsFiles.containsKey(name)) {
-                        ProjectViewNode controllerNode = rtJsFiles.get(name);
+                        controllerNode = rtJsFiles.get(name);
                         subNodes.add((BasePsiNode<? extends PsiFile>) controllerNode);
                         result.remove(controllerNode);
                     }
                 }
-                result.add(new RTNode(project, new RTFile(psiClass, (PsiFile) rtJsNode.getValue()), settings, subNodes));
+                PsiFile controller = controllerNode == null ? null : (PsiFile) controllerNode.getValue();
+                result.add(new RTNode(project, new RTFile(psiClass, (PsiFile) rtJsNode.getValue(), controller), settings, subNodes));
                 result.remove(element);
                 result.remove(rtJsNode);
             }
@@ -181,12 +183,32 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
                 if (!result.isEmpty()) {
                     return result.toArray(new RTFile[result.size()]);
                 }
+            } else if (PlatformDataKeys.COPY_PROVIDER.is(dataId)) {
+                for (AbstractTreeNode node : selected) {
+                    if (node.getValue() instanceof RTFile) {
+                        return new MyCopyProvider(selected);
+                    }
+                }
+                return new CopyProvider();
             } else if (PlatformDataKeys.DELETE_ELEMENT_PROVIDER.is(dataId)) {
                 for (AbstractTreeNode node : selected) {
                     if (node.getValue() instanceof RTFile) {
-                        return new MyDeleteProvider(selected);
+                        return new MyCopyProvider(selected);
                     }
                 }
+            } else if (PlatformDataKeys.CUT_PROVIDER.is(dataId)) {
+                for (AbstractTreeNode node : selected) {
+                    if (node.getValue() instanceof RTFile) {
+                        return new MyCopyProvider(selected);
+                    }
+                }
+            } else if (PlatformDataKeys.PASTE_PROVIDER.is(dataId)) {
+                return new MyCopyProvider(selected);
+//                for (AbstractTreeNode node : selected) {
+//                    if (node.getValue() instanceof RTFile) {
+//                        return new MyCopyProvider(selected);
+//                    }
+//                }
             }
         }
         return null;
@@ -215,11 +237,79 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
         return result;
     }
 
-    private static class MyDeleteProvider implements DeleteProvider {
+    private static class MyCopyProvider implements CopyProvider, PasteProvider, CutProvider, DeleteProvider {
         private final PsiElement[] myElements;
 
-        public MyDeleteProvider(final Collection<AbstractTreeNode> selected) {
+        public MyCopyProvider(final Collection<AbstractTreeNode> selected) {
             myElements = collectFormPsiElements(selected);
+        }
+
+        private static PsiElement[] collectFormPsiElements(Collection<AbstractTreeNode> selected) {
+            Set<PsiElement> result = new HashSet<PsiElement>();
+            for (AbstractTreeNode node : selected) {
+                if (node.getValue() instanceof RTFile) {
+                    RTFile form = (RTFile) node.getValue();
+                    result.add(form.getRTJSFile());
+                    if (form.getController() != null) {
+                        result.add(form.getController());
+                    }
+                    ContainerUtil.addAll(result, form.getRtFile());
+                } else if (node.getValue() instanceof PsiElement) {
+                    result.add((PsiElement) node.getValue());
+                }
+            }
+            return PsiUtilCore.toPsiElementArray(result);
+        }
+
+        @Override
+        public void performCopy(@NotNull DataContext dataContext) {
+//            final SerializedComponentData data = new SerializedComponentData(serializeForCopy(myEditor, selectedComponents));
+//            final SimpleTransferable transferable = new SimpleTransferable<SerializedComponentData>(data, SerializedComponentData.class, ourDataFlavor);
+//            CopyPasteManager.getInstance().setContents();
+            PsiCopyPasteManager.getInstance().setElements(myElements, true);
+        }
+
+        @Override
+        public boolean isCopyEnabled(@NotNull DataContext dataContext) {
+            return true;
+        }
+
+        @Override
+        public boolean isCopyVisible(@NotNull DataContext dataContext) {
+            return true;
+        }
+
+        @Override
+        public void performPaste(@NotNull DataContext dataContext) {
+            RTFile[] rtFiles = RTFile.DATA_KEY.getData(dataContext);
+            if (rtFiles != null) {
+                System.out.println(rtFiles.length);
+            }
+        }
+
+        @Override
+        public boolean isPastePossible(@NotNull DataContext dataContext) {
+            return true;
+        }
+
+        @Override
+        public boolean isPasteEnabled(@NotNull DataContext dataContext) {
+            return true;
+        }
+
+        @Override
+        public void performCut(@NotNull DataContext dataContext) {
+            PsiCopyPasteManager.getInstance().setElements(myElements, true);
+        }
+
+        @Override
+        public boolean isCutEnabled(@NotNull DataContext dataContext) {
+            return true;
+        }
+
+        @Override
+        public boolean isCutVisible(@NotNull DataContext dataContext) {
+            return true;
         }
 
         public void deleteElement(@NotNull DataContext dataContext) {
@@ -229,20 +319,6 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider {
 
         public boolean canDeleteElement(@NotNull DataContext dataContext) {
             return DeleteHandler.shouldEnableDeleteAction(myElements);
-        }
-
-        private static PsiElement[] collectFormPsiElements(Collection<AbstractTreeNode> selected) {
-            Set<PsiElement> result = new HashSet<PsiElement>();
-            for (AbstractTreeNode node : selected) {
-                if (node.getValue() instanceof RTFile) {
-                    RTFile form = (RTFile) node.getValue();
-                    result.add(form.getRTJSFile());
-                    ContainerUtil.addAll(result, form.getRtFile());
-                } else if (node.getValue() instanceof PsiElement) {
-                    result.add((PsiElement) node.getValue());
-                }
-            }
-            return PsiUtilCore.toPsiElementArray(result);
         }
     }
 }
