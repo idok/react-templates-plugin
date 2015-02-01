@@ -57,6 +57,7 @@ public class RTSettingsPage implements Configurable {
     private JRadioButton AMDRadioButton;
     private JRadioButton commonJSRadioButton;
     private JPanel modulesPanel;
+    private JLabel modulesLabel;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
     public RTSettingsPage(@NotNull final Project project) {
@@ -128,6 +129,11 @@ public class RTSettingsPage implements Configurable {
         pathToRTBinLabel.setEnabled(enabled);
         nodeInterpreterLabel.setEnabled(enabled);
         modulesPanel.setEnabled(enabled);
+        groupController.setEnabled(enabled);
+        commonJSRadioButton.setEnabled(enabled);
+        noneGlobalsRadioButton.setEnabled(enabled);
+        AMDRadioButton.setEnabled(enabled);
+        modulesLabel.setEnabled(enabled);
     }
 
     private void validateField(List<ValidationInfo> errors, TextFieldWithHistoryWithBrowseButton field, boolean allowEmpty, String message) {
