@@ -3,7 +3,7 @@ package com.wix.rt.settings;
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.wix.rt.utils.RTRunner;
+import com.wix.rt.cli.RTRunner;
 import org.jetbrains.annotations.Nullable;
 
 @State(name = "RTProjectComponent",
@@ -17,7 +17,7 @@ public class Settings implements PersistentStateComponent<Settings> {
     public boolean treatAllIssuesAsWarnings;
     public boolean pluginEnabled;
     public String modules = RTRunner.AMD;
-    public boolean groupController;
+    public boolean groupController = true;
     /**
      * @deprecated
      */
