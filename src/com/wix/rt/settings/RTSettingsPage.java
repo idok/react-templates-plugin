@@ -2,6 +2,7 @@ package com.wix.rt.settings;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.execution.ExecutionException;
+import com.intellij.ide.projectView.ProjectView;
 import com.intellij.javascript.nodejs.NodeDetectionUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -256,6 +257,7 @@ public class RTSettingsPage implements Configurable {
     public void apply() throws ConfigurationException {
         saveSettings();
         PsiManager.getInstance(project).dropResolveCaches();
+        ProjectView.getInstance(project).refresh();
     }
 
     protected void saveSettings() {
