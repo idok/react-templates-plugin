@@ -2,7 +2,6 @@ package com.wix.rt.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -64,34 +63,13 @@ public final class RTRunner {
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
 
             String outputJSON = output.getStdout();
-            return parseNpmOutdated(outputJSON);
+            return Outdated.parseNpmOutdated(outputJSON);
         } catch (ExecutionException e) {
             LOG.warn("Could not build react-templates file", e);
 //            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, NotificationType.WARNING);
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static class Outdated {
-        @SerializedName("react-templates")
-        public OutdatedClass rt;
-    }
-
-    public static class OutdatedClass {
-        public String current;
-        public String wanted;
-        public String latest;
-        public String location;
-    }
-
-    private static Outdated parseNpmOutdated(String json) {
-        GsonBuilder builder = new GsonBuilder();
-//        builder.registerTypeAdapterFactory(adapter);
-        Gson g = builder.setPrettyPrinting().create();
-        Type listType = new TypeToken<Outdated>() {
-        }.getType();
-        return g.fromJson(json, listType);
     }
 
     //rt --list-target-version -f json
