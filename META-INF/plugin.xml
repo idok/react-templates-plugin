@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.11</version>
+    <version>1.0.15</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok/react-templates-plugin">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,6 +14,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.15 Bug fixes</p>
+       <p>1.0.14 Bug fixes</p>
+       <p>1.0.13 Bug fixes, better error reporting</p>
+       <p>1.0.12 Bug fixes</p>
        <p>1.0.11 Update docs</p>
        <p>1.0.10 create controller with react-templates file</p>
        <p>1.0.9 add modules support for react-templates 0.1.5</p>
@@ -67,12 +71,11 @@
 
         <internalFileTemplate subject="New RT File template" name="RT File" />
 
-        <localInspection language="HTML" groupPath="JavaScript" shortName="RTInspection"
-                         enabledByDefault="true" level="ERROR"
+        <localInspection language="HTML" groupPath="HTML"
+                         enabledByDefault="true" level="ERROR" hasStaticDescription="true"
                          bundle="com.wix.rt.RTBundle"
                          implementationClass="com.wix.rt.inspection.RTInspection"
                          displayName="React Templates" groupKey="rt.inspection.group.name"/>
-        <!--unfair="true" runForWholeFile="true" level="WARNING" -->
         <externalAnnotator language="HTML" implementationClass="com.wix.rt.inspection.RTExternalAnnotator" />
     </extensions>
 
@@ -98,7 +101,6 @@
         <group id="com.wix.rt.NewActions">
             <separator/>
             <action id="com.wix.rt.NewRT" class="com.wix.rt.actions.CreateRTAction" />
-            <!--<action id="com.wix.rt.NewRT2" class="com.wix.rt.actions.CreateDartFileAction" />-->
             <add-to-group anchor="after" group-id="NewGroup" relative-to-action="NewFromTemplate"/>
         </group>
     </actions>
