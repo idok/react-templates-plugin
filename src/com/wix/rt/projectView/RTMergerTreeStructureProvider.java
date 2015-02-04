@@ -1,10 +1,8 @@
 package com.wix.rt.projectView;
 
-import com.intellij.codeInsight.editorActions.PasteHandler;
-import com.intellij.designer.clipboard.SimpleTransferable;
 import com.intellij.ide.*;
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.projectView.TreeStructureProvider;
+import com.intellij.ide.projectView.SelectableTreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
 import com.intellij.ide.util.DeleteHandler;
@@ -12,30 +10,22 @@ import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.uiDesigner.SerializedComponentData;
 import com.intellij.util.containers.ContainerUtil;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
-import org.intellij.images.editor.ImageDocument;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.*;
 
-public class RTMergerTreeStructureProvider implements TreeStructureProvider, DumbAware {
+public class RTMergerTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware {
     private final Project project;
 
     public RTMergerTreeStructureProvider(Project project) {
@@ -74,7 +64,7 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider, Dum
         return comp.settings.groupController;
     }
 
-    private String getControllerName(String rtName) {
+    private static String getControllerName(String rtName) {
         return rtName.substring(0, rtName.length() - 2) + "js";
     }
 
@@ -171,7 +161,7 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider, Dum
         return result;
     }
 
-    public Object getData(Collection<AbstractTreeNode> selected, String dataId) {
+    public Object getData(final Collection<AbstractTreeNode> selected, String dataId) {
         if (selected != null) {
             if (RTFile.DATA_KEY.is(dataId)) {
                 List<RTFile> result = new ArrayList<RTFile>();
@@ -183,35 +173,33 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider, Dum
                 if (!result.isEmpty()) {
                     return result.toArray(new RTFile[result.size()]);
                 }
-            } else if (PlatformDataKeys.COPY_PROVIDER.is(dataId)) {
+            } else if (PlatformDataKeys.COPY_PROVIDER.is(dataId) || PlatformDataKeys.DELETE_ELEMENT_PROVIDER.is(dataId) || PlatformDataKeys.CUT_PROVIDER.is(dataId)) {
                 for (AbstractTreeNode node : selected) {
                     if (node.getValue() instanceof RTFile) {
                         return new MyCopyProvider(selected);
                     }
                 }
-                return new CopyProvider();
-            } else if (PlatformDataKeys.DELETE_ELEMENT_PROVIDER.is(dataId)) {
-                for (AbstractTreeNode node : selected) {
-                    if (node.getValue() instanceof RTFile) {
-                        return new MyCopyProvider(selected);
-                    }
-                }
-            } else if (PlatformDataKeys.CUT_PROVIDER.is(dataId)) {
-                for (AbstractTreeNode node : selected) {
-                    if (node.getValue() instanceof RTFile) {
-                        return new MyCopyProvider(selected);
-                    }
-                }
-            } else if (PlatformDataKeys.PASTE_PROVIDER.is(dataId)) {
-                return new MyCopyProvider(selected);
-//                for (AbstractTreeNode node : selected) {
-//                    if (node.getValue() instanceof RTFile) {
-//                        return new MyCopyProvider(selected);
-//                    }
-//                }
+//            } else if (PlatformDataKeys.PASTE_PROVIDER.is(dataId)) {
             }
         }
         return null;
+    }
+
+    private static PsiElement[] collectFormPsiElements(Collection<AbstractTreeNode> selected) {
+        Set<PsiElement> result = new HashSet<PsiElement>();
+        for (AbstractTreeNode node : selected) {
+            if (node.getValue() instanceof RTFile) {
+                RTFile form = (RTFile) node.getValue();
+                result.add(form.getRTJSFile());
+                if (form.getController() != null) {
+                    result.add(form.getController());
+                }
+                ContainerUtil.addAll(result, form.getRtFile());
+            } else if (node.getValue() instanceof PsiElement) {
+                result.add((PsiElement) node.getValue());
+            }
+        }
+        return PsiUtilCore.toPsiElementArray(result);
     }
 
     private static Collection<PsiFile> convertToFiles(Collection<BasePsiNode<? extends PsiElement>> formNodes) {
@@ -235,6 +223,12 @@ public class RTMergerTreeStructureProvider implements TreeStructureProvider, Dum
             }
         }
         return result;
+    }
+
+    @Nullable
+    @Override
+    public PsiElement getTopLevelElement(PsiElement psiElement) {
+        return null;
     }
 
     private static class MyCopyProvider implements CopyProvider, PasteProvider, CutProvider, DeleteProvider {
