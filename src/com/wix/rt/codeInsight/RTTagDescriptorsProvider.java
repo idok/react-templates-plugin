@@ -6,9 +6,11 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.javascript.index.JSNamedElementProxy;
 import com.intellij.psi.html.HtmlTag;
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider;
+import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.xml.XmlElementDescriptor;
 import com.intellij.xml.XmlTagNameProvider;
+import com.intellij.xml.impl.schema.AnyXmlElementDescriptor;
 import com.wix.rt.RTProjectComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,6 +54,15 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
         if (directiveName.equals(RT_REQUIRE)) {
             return new RTRequireTagDescriptor(RT_REQUIRE, xmlTag);
         }
+
+        List<String> tags = RTHtmlExtension.loadImportedTags((XmlFile) xmlTag.getContainingFile(), xmlTag);
+        for (String tag : tags) {
+            if (tag.equals(directiveName)) {
+                return new RTClassTagDescriptor(directiveName, xmlTag);
+            }
+        }
+        // TODO: support required tags
+        //return new AnyXmlElementDescriptor()
         return null;
     }
 }

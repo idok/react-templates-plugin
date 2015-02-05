@@ -58,7 +58,7 @@ public class RTHtmlExtension extends HtmlXmlExtension {
         return list;
     }
 
-    private static List<String> loadImportedTags(@NotNull XmlFile file, @NotNull XmlTag context) {
+    public static List<String> loadImportedTags(@NotNull XmlFile file, @NotNull XmlTag context) {
 //        PsiElement[] arr = file.getRootTag().getChildren();
 //        Collection<HtmlTag> tags = PsiTreeUtil.findChildrenOfType(file, HtmlTag.class);
         PsiElement[] reqTags = PsiTreeUtil.collectElements(file, new PsiElementFilter() {
