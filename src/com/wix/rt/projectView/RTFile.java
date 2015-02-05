@@ -34,7 +34,7 @@ public class RTFile implements Navigatable {
     }
 
     public String getName() {
-        return rtFile.getName();
+        return rtFile.getVirtualFile().getNameWithoutExtension();
     }
 
     public PsiFile getRTJSFile() {
