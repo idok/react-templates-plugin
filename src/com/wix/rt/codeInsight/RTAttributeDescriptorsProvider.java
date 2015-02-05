@@ -22,7 +22,7 @@ public class RTAttributeDescriptorsProvider implements XmlAttributeDescriptorsPr
             final Project project = xmlTag.getProject();
             if (RTActionUtil.isRTEnabled(project)) {
                 final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();
-                for (String attr : RTAttributes.attributes) {
+                for (String attr : RTAttributes.ATTRIBUTES) {
                     result.put(attr, new RTXmlAttributeDescriptor(attr));
                 }
 //                result.put("rt-repeat", new RTXmlAttributeDescriptor("rt-repeat")); // x in [javascript]
