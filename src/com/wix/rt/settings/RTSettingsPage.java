@@ -59,6 +59,9 @@ public class RTSettingsPage implements Configurable {
     private JRadioButton commonJSRadioButton;
     private JPanel modulesPanel;
     private JLabel modulesLabel;
+    private JCheckBox groupOtherFilesCheckBox;
+    private JRadioButton ES6RadioButton;
+    private JRadioButton typescriptRadioButton;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
     public RTSettingsPage(@NotNull final Project project) {
@@ -121,6 +124,12 @@ public class RTSettingsPage implements Configurable {
         if (commonJSRadioButton.isSelected()) {
             return RTRunner.COMMONJS;
         }
+        if (ES6RadioButton.isSelected()) {
+            return RTRunner.ES6;
+        }
+        if (typescriptRadioButton.isSelected()) {
+            return RTRunner.TYPESCRIPT;
+        }
         return RTRunner.NONE;
     }
 
@@ -134,7 +143,10 @@ public class RTSettingsPage implements Configurable {
         commonJSRadioButton.setEnabled(enabled);
         noneGlobalsRadioButton.setEnabled(enabled);
         AMDRadioButton.setEnabled(enabled);
+        ES6RadioButton.setEnabled(enabled);
+        typescriptRadioButton.setEnabled(enabled);
         modulesLabel.setEnabled(enabled);
+        groupOtherFilesCheckBox.setEnabled(enabled);
     }
 
     private void validateField(List<ValidationInfo> errors, TextFieldWithHistoryWithBrowseButton field, boolean allowEmpty, String message) {
@@ -267,6 +279,7 @@ public class RTSettingsPage implements Configurable {
         settings.nodeInterpreter = nodeInterpreterField.getChildComponent().getText();
         settings.modules = getModules();
         settings.groupController = groupController.isSelected();
+        settings.groupOther = groupOtherFilesCheckBox.isSelected();
         project.getComponent(RTProjectComponent.class).validateSettings();
         DaemonCodeAnalyzer.getInstance(project).restart();
     }
@@ -286,6 +299,7 @@ public class RTSettingsPage implements Configurable {
         }
 
         groupController.setSelected(settings.groupController);
+        groupOtherFilesCheckBox.setSelected(settings.groupOther);
         setEnabledState(settings.pluginEnabled);
     }
 

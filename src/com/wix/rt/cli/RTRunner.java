@@ -27,6 +27,8 @@ public final class RTRunner {
     public static final String AMD = "amd";
     public static final String COMMONJS = "commonjs";
     public static final String NONE = "none";
+    public static final String ES6 = "es6";
+    public static final String TYPESCRIPT = "typescript";
 
     private static final Logger LOG = Logger.getInstance(RTRunner.class);
 
