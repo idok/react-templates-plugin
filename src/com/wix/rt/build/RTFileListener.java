@@ -190,7 +190,7 @@ public class RTFileListener {
         public void fileCopied(@NotNull VirtualFileCopyEvent event) {
 //            System.out.println("fileCopied " + event.getFileName());
             RTFileListener.this.fileChanged(event.getFile());
-            RTFileListener.this.fileChanged(event.getOriginalFile());
+//            RTFileListener.this.fileChanged(event.getOriginalFile());
         }
 
         @Override

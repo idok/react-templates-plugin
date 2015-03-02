@@ -36,7 +36,7 @@ public final class RTRunner {
 
     @NotNull
     public static ProcessOutput convertFile(@NotNull RTSettings settings) throws ExecutionException {
-        GeneralCommandLine commandLine = RTCliBuilder.createCommandLineLint(settings);
+        GeneralCommandLine commandLine = RTCliBuilder.createCommandLineBuild(settings);
         return NodeRunner.execute(commandLine, TIME_OUT);
     }
 
@@ -54,6 +54,7 @@ public final class RTRunner {
         return result;
     }
 
+    //npm ls react-templates -g --depth 0 --json
     //npm outdated react-templates -g -json
     public static Outdated npmOutdated(@NotNull String cwd, @NotNull String node) {
         try {
@@ -79,7 +80,7 @@ public final class RTRunner {
         RTSettings settings = RTSettings.build(cwd, node, rtBin);
         Result result = new Result();
         try {
-            GeneralCommandLine commandLine = RTCliBuilder.createCommandLineLint(settings);
+            GeneralCommandLine commandLine = RTCliBuilder.createCommandLineBuild(settings);
             commandLine.addParameter("--force");
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             result.warns = parse(output.getStdout());
@@ -95,8 +96,7 @@ public final class RTRunner {
         RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, true);
         Result result = new Result();
         try {
-            GeneralCommandLine commandLine = RTCliBuilder.createCommandLineLint(settings);
-            commandLine.addParameter("--force");
+            GeneralCommandLine commandLine = RTCliBuilder.createCommandLineValidate(settings);
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {

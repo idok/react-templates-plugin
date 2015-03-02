@@ -35,7 +35,7 @@ final class RTCliBuilder {
     }
 
     @NotNull
-    static GeneralCommandLine createCommandLineLint(@NotNull RTSettings settings) {
+    static GeneralCommandLine createCommandLineBuild(@NotNull RTSettings settings) {
         GeneralCommandLine commandLine = createCommandLine(settings);
 //        if (!new File(settings.cwd, settings.targetFile).exists()) {
 //            throw new IllegalArgumentException("targetFile doesn't exist");
@@ -46,6 +46,22 @@ final class RTCliBuilder {
         if (settings.dryRun) {
             commandLine.addParameter("--dry-run");
         }
+        commandLine.addParameter("--format");
+        commandLine.addParameter("json");
+        return commandLine;
+    }
+
+    @NotNull
+    static GeneralCommandLine createCommandLineValidate(@NotNull RTSettings settings) {
+        GeneralCommandLine commandLine = createCommandLine(settings);
+//        if (!new File(settings.cwd, settings.targetFile).exists()) {
+//            throw new IllegalArgumentException("targetFile doesn't exist");
+//        }
+        commandLine.addParameter(settings.targetFile);
+        commandLine.addParameter("--modules");
+        commandLine.addParameter(settings.modules);
+        commandLine.addParameter("--dry-run"); //no generation
+        commandLine.addParameter("--force"); //validate with force
         commandLine.addParameter("--format");
         commandLine.addParameter("json");
         return commandLine;
