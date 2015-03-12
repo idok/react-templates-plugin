@@ -79,6 +79,8 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         }
         if (parent.getValue() instanceof RTFile) return children;
         boolean groupController = isGroupController(project);
+        RTProjectComponent comp = project.getComponent(RTProjectComponent.class);
+        boolean groupOther = comp.settings.groupOther;
 
         // Optimization. Check if there are any forms at all.
         boolean formsFound = hasRTFiles(children);
@@ -138,6 +140,14 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
                         result.remove(controllerNode);
                     }
                 }
+//                if (groupOther) {
+//                    String name = getControllerName(element.getVirtualFile());
+//                    if (rtJsFiles.containsKey(name)) {
+//                        controllerNode = rtJsFiles.get(name);
+//                        subNodes.add((BasePsiNode<? extends PsiFile>) controllerNode);
+//                        result.remove(controllerNode);
+//                    }
+//                }
                 PsiFile controller = controllerNode == null ? null : (PsiFile) controllerNode.getValue();
                 result.add(new RTNode(project, new RTFile(psiClass, (PsiFile) rtJsNode.getValue(), controller), settings, subNodes));
                 result.remove(element);

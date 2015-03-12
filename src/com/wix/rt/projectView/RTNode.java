@@ -106,6 +106,9 @@ public class RTNode extends ProjectViewNode<RTFile> {
     @Nullable
     @Override
     public VirtualFile getVirtualFile() {
-        return getValue().getRtFile().getVirtualFile();
+        if (getValue() != null && getValue().getRtFile() != null) {
+            return getValue().getRtFile().getVirtualFile();
+        }
+        return null;
     }
 }

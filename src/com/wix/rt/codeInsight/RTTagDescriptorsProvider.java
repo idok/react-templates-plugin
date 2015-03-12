@@ -55,10 +55,12 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
             return new RTRequireTagDescriptor(RT_REQUIRE, xmlTag);
         }
 
-        List<String> tags = RTHtmlExtension.loadImportedTags((XmlFile) xmlTag.getContainingFile(), xmlTag);
-        for (String tag : tags) {
-            if (tag.equals(directiveName)) {
-                return new RTClassTagDescriptor(directiveName, xmlTag);
+        if (xmlTag.getContainingFile() instanceof XmlFile) {
+            List<String> tags = RTHtmlExtension.loadImportedTags((XmlFile) xmlTag.getContainingFile(), xmlTag);
+            for (String tag : tags) {
+                if (tag.equals(directiveName)) {
+                    return new RTClassTagDescriptor(directiveName, xmlTag);
+                }
             }
         }
         // TODO: support required tags

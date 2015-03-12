@@ -52,4 +52,14 @@ RT Attributes quick docs:<br/>
 ![React-Templates inline](https://raw.githubusercontent.com/idok/react-templates-plugin/master/docs/quick-docs.png)
 
 ### A Note to contributors ###
-react-templates plugin uses the code from [here](https://github.com/idok/scss-lint-plugin/tree/master/intellij-common) as a module, to run the project you need to clone that project as well.
+react-templates plugin uses the code from [here](https://github.com/idok/intellij-common) as a module, to run the project you need to clone that project as well.
+
+```bash
+git clone git@github.com:idok/react-templates-plugin.git
+git clone git@github.com:idok/intellij-common.git
+```
+
+* Open intellij
+* Import project react-templates-plugin
+* Import module intellij-common
+* Add module intellij-common as dependency for react-templates-plugin

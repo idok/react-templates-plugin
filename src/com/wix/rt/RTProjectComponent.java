@@ -74,6 +74,11 @@ public class RTProjectComponent implements ProjectComponent {
     public void disposeComponent() {
         // TODO
         //VirtualFileManager.getInstance().removeVirtualFileListener(virtualFileListener);
+        RTFileListener.stop(project);
+    }
+
+    public static RTProjectComponent getInstace(Project project) {
+        return project.getComponent(RTProjectComponent.class);
     }
 
     @NotNull

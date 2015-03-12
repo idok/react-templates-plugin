@@ -12,6 +12,7 @@ import com.intellij.xml.XmlAttributeDescriptor;
 import com.intellij.xml.XmlElementDescriptor;
 import com.intellij.xml.XmlElementsGroup;
 import com.intellij.xml.XmlNSDescriptor;
+import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,12 +79,12 @@ public class RTClassTagDescriptor implements XmlElementDescriptor {
     @Override
     public XmlAttributeDescriptor[] getAttributesDescriptors(@Nullable XmlTag context) {
         // final Project project = xmlTag.getProject();
-        final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();
+//        final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();
 //        result.put(RTTagDescriptorsProvider.DEPENDENCY, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.DEPENDENCY));
 //        result.put(RTTagDescriptorsProvider.AS, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.AS));
         // <rt-require dependency="./CodeMirrorEditor" as="CodeEditor"/>
-        return result.values().toArray(new XmlAttributeDescriptor[result.size()]);
-        // return new XmlAttributeDescriptor[0];
+//        return result.values().toArray(new XmlAttributeDescriptor[result.size()]);
+        return new XmlAttributeDescriptor[0];
     }
 
     @Nullable
@@ -95,12 +96,13 @@ public class RTClassTagDescriptor implements XmlElementDescriptor {
     @Nullable
     @Override
     public XmlAttributeDescriptor getAttributeDescriptor(@NonNls final String attributeName, @Nullable XmlTag context) {
-        return ContainerUtil.find(getAttributesDescriptors(context), new Condition<XmlAttributeDescriptor>() {
-            @Override
-            public boolean value(XmlAttributeDescriptor descriptor) {
-                return attributeName.equals(descriptor.getName());
-            }
-        });
+        return new AnyXmlAttributeDescriptor(attributeName);
+//        return ContainerUtil.find(getAttributesDescriptors(context), new Condition<XmlAttributeDescriptor>() {
+//            @Override
+//            public boolean value(XmlAttributeDescriptor descriptor) {
+//                return attributeName.equals(descriptor.getName());
+//            }
+//        });
     }
 
     @Override
