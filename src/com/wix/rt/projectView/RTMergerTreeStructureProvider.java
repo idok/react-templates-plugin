@@ -48,11 +48,14 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
     private static boolean hasJsExt(VirtualFile file) {
         return file != null && file.getExtension() != null && file.getExtension().equals("js");
     }
+    private static boolean hasTsExt(VirtualFile file) {
+        return file != null && file.getExtension() != null && file.getExtension().equals("ts");
+    }
 
     private static Map<String, ProjectViewNode> map(ProjectViewNode[] copy) {
         Map<String, ProjectViewNode> rtJsFiles = new HashMap<String, ProjectViewNode>();
         for (ProjectViewNode element : copy) {
-            if (RTFileUtil.isRTJSFile(element.getVirtualFile()) || hasJsExt(element.getVirtualFile())) {
+            if (RTFileUtil.isRTJSFile(element.getVirtualFile()) || hasJsExt(element.getVirtualFile()) || hasTsExt( element.getVirtualFile() )) {
                 rtJsFiles.put(element.getVirtualFile().getName(), element);
             }
         }
@@ -64,13 +67,21 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         return comp.settings.groupController;
     }
 
-    private static String getControllerName(String rtName) {
-        return rtName.substring(0, rtName.length() - 2) + "js";
-    }
+    //BGR: Not used
+//    private static String getJSControllerName( String rtName ) {
+//        return rtName.substring(0, rtName.length() - 2) + "js";
+//    }
+//    private static String getTSControllerName( String rtName ) {
+//        return rtName.substring(0, rtName.length() - 2) + "ts";
+//    }
 
-    private static String getControllerName(VirtualFile rtFile) {
+    private static String getJSControllerName( VirtualFile rtFile ) {
         return rtFile.getNameWithoutExtension() + ".js";
     }
+    private static String getTSControllerName( VirtualFile rtFile ) {
+        return rtFile.getNameWithoutExtension() + ".ts";
+    }
+
 
     @NotNull
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
@@ -119,6 +130,13 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
                 if (rtJsFiles.containsKey(name)) {
                     rtJsNode = rtJsFiles.get(name);
                 }
+                else {
+                    //try with a ts file
+                    name = RTFileUtil.getTsRTFileName( element.getVirtualFile().getName() );
+                    if (rtJsFiles.containsKey(name)) {
+                        rtJsNode = rtJsFiles.get(name);
+                    }
+                }
 //                    forms.add(rtFile);
 //                }
             } catch (ProcessCanceledException e) {
@@ -133,9 +151,17 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
                 subNodes.add((BasePsiNode<? extends PsiFile>) rtJsNode);
                 ProjectViewNode controllerNode = null;
                 if (groupController) {
-                    String name = getControllerName(element.getVirtualFile());
+                    String name = getJSControllerName( element.getVirtualFile() );
                     if (rtJsFiles.containsKey(name)) {
-                        controllerNode = rtJsFiles.get(name);
+                        controllerNode = rtJsFiles.get( name );
+                    } else {
+                        //try with the TS extension
+                        name = getTSControllerName( element.getVirtualFile() );
+                        if (rtJsFiles.containsKey(name)) {
+                            controllerNode = rtJsFiles.get( name );
+                        }
+                    }
+                    if (controllerNode != null) {
                         subNodes.add((BasePsiNode<? extends PsiFile>) controllerNode);
                         result.remove(controllerNode);
                     }

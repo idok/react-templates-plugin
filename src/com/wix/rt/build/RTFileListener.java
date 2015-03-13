@@ -212,6 +212,17 @@ public class RTFileListener {
                         e.printStackTrace();
                     }
                 }
+                else {
+                    //try a .ts file
+                    jsFile = file.getParent().findChild(RTFileUtil.getTsRTFileName((String) event.getOldValue()));
+                    if (jsFile != null) {
+                        try {
+                            jsFile.rename(this, RTFileUtil.getTsRTFileName((String) event.getNewValue()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
         }
     }

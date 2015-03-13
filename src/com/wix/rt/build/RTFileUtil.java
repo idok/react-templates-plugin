@@ -21,7 +21,7 @@ public final class RTFileUtil {
     }
 
     public static boolean isRTJSFile(VirtualFile file) {
-        return file.getName().endsWith(".rt.js");
+        return file.getName().endsWith(".rt.js") || file.getName().endsWith(".rt.ts");
     }
 
     public static boolean hasRTExt(VirtualFile file) {
@@ -39,6 +39,11 @@ public final class RTFileUtil {
     public static String getJsRTFileName(String rtFileName) {
         return rtFileName + ".js";
     }
+
+    public static String getTsRTFileName(String rtFileName) {
+        return rtFileName + ".ts";
+    }
+
 
     public static String getJsRTFileName(VirtualFile file) {
         return getJsRTFileName(file.getName());
