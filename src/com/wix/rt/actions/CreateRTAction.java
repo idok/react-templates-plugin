@@ -126,7 +126,7 @@ public class CreateRTAction extends AbstractCreateFormAction {
             if (createController) {
                 // TODO generate according to selected modules
                 String modules = Settings.getInstance(project).modules;
-                final String controllerFileName = newName + ( RTRunner.TYPESCRIPT.equals( modules ) ? ".ts " : ".js");
+                final String controllerFileName = newName + ( RTRunner.TYPESCRIPT.equals( modules ) ? ".ts" : ".js");
                 final String controllerBody = getControllerTemplate(newName, modules);
                 final LanguageFileType fileType = ( RTRunner.TYPESCRIPT.equals( modules ) ? TypeScriptFileType.INSTANCE : JavaScriptFileType.INSTANCE);
                 final PsiFile controllerFile = PsiFileFactory.getInstance(project).createFileFromText(controllerFileName, fileType, controllerBody);
