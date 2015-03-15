@@ -20,10 +20,12 @@ import com.intellij.ide.actions.TemplateKindCombo;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.lang.javascript.JavaScriptFileType;
+import com.intellij.lang.javascript.TypeScriptFileType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.io.FileUtil;
@@ -38,6 +40,7 @@ import com.intellij.util.PlatformIcons;
 import com.wix.rt.RTBundle;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileType;
+import com.wix.rt.cli.RTRunner;
 import com.wix.rt.settings.Settings;
 import icons.RTIcons;
 import org.jetbrains.annotations.NonNls;
@@ -91,7 +94,8 @@ public class CreateRTAction extends AbstractCreateFormAction {
     private static String getControllerTemplate(String name, String modules) {
         String s = "";
         try {
-            s = FileUtil.loadTextAndClose(CreateRTAction.class.getResourceAsStream("/fileTemplates/internal/RT Controller File " + modules + ".js.ft"));
+            String tplName = ( RTRunner.TYPESCRIPT.equals( modules ) ? "/fileTemplates/internal/RT Controller File typescript.ts.ft" : "/fileTemplates/internal/RT Controller File " + modules + ".js.ft" );
+            s = FileUtil.loadTextAndClose(CreateRTAction.class.getResourceAsStream(tplName));
             s = StringUtil.replace(s, "$name$", name);
         } catch (IOException e) {
 //      throw new IncorrectOperationException(RTBundle.message("error.cannot.read", formName), (Throwable)e);
@@ -121,10 +125,11 @@ public class CreateRTAction extends AbstractCreateFormAction {
             createdFile = directory.add(formFile);
             if (createController) {
                 // TODO generate according to selected modules
-                final String controllerFileName = newName + ".js";
                 String modules = Settings.getInstance(project).modules;
+                final String controllerFileName = newName + ( RTRunner.TYPESCRIPT.equals( modules ) ? ".ts" : ".js");
                 final String controllerBody = getControllerTemplate(newName, modules);
-                final PsiFile controllerFile = PsiFileFactory.getInstance(project).createFileFromText(controllerFileName, JavaScriptFileType.INSTANCE, controllerBody);
+                final LanguageFileType fileType = ( RTRunner.TYPESCRIPT.equals( modules ) ? TypeScriptFileType.INSTANCE : JavaScriptFileType.INSTANCE);
+                final PsiFile controllerFile = PsiFileFactory.getInstance(project).createFileFromText(controllerFileName, fileType, controllerBody);
                 createdControllerFile = directory.add(controllerFile);
                 return new PsiElement[]{createdFile, createdControllerFile};
             }
