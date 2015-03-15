@@ -183,7 +183,6 @@ public class RTSettingsPage implements Configurable {
         if (settings != null &&
                 areEqual(nodeInterpreterField, settings.node) &&
                 areEqual(rtBinField, settings.rtExecutablePath) &&
-                settings.modules.equals(getModules()) &&
                 settings.cwd.equals(project.getBasePath())
                 ) {
             return;
@@ -192,7 +191,6 @@ public class RTSettingsPage implements Configurable {
         settings.node = nodeInterpreterField.getChildComponent().getText();
         settings.rtExecutablePath = rtBinField.getChildComponent().getText();
         settings.cwd = project.getBasePath();
-        settings.modules = getModules();
         try {
             String version = RTRunner.runVersion(settings);
             versionLabel.setText(version.trim());
@@ -294,6 +292,10 @@ public class RTSettingsPage implements Configurable {
             AMDRadioButton.setSelected(true);
         } else if (settings.modules.equals(RTRunner.COMMONJS)) {
             commonJSRadioButton.setSelected(true);
+        } else if (settings.modules.equals(RTRunner.TYPESCRIPT)) {
+            typescriptRadioButton.setSelected(true);
+        } else if (settings.modules.equals(RTRunner.ES6)) {
+            ES6RadioButton.setSelected(true);
         } else {
             noneGlobalsRadioButton.setSelected(true);
         }
