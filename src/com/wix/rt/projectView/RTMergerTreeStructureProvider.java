@@ -151,14 +151,14 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
                 subNodes.add((BasePsiNode<? extends PsiFile>) rtJsNode);
                 ProjectViewNode controllerNode = null;
                 if (groupController) {
-                    String name = getJSControllerName( element.getVirtualFile() );
+                    String name = getJSControllerName(element.getVirtualFile());
                     if (rtJsFiles.containsKey(name)) {
-                        controllerNode = rtJsFiles.get( name );
+                        controllerNode = rtJsFiles.get(name);
                     } else {
                         //try with the TS extension
-                        name = getTSControllerName( element.getVirtualFile() );
+                        name = getTSControllerName(element.getVirtualFile());
                         if (rtJsFiles.containsKey(name)) {
-                            controllerNode = rtJsFiles.get( name );
+                            controllerNode = rtJsFiles.get(name);
                         }
                     }
                     if (controllerNode != null) {
