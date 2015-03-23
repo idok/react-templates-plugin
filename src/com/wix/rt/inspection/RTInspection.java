@@ -20,6 +20,7 @@ import com.intellij.ui.HyperlinkAdapter;
 import com.intellij.ui.HyperlinkLabel;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.util.containers.ContainerUtil;
+import com.wix.annotator.InspectionUtil;
 import com.wix.rt.RTBundle;
 import com.wix.rt.settings.RTSettingsPage;
 import org.jetbrains.annotations.NotNull;
