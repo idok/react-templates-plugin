@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.19</version>
+    <version>1.0.20</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok/react-templates-plugin">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,6 +14,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.20 Fix crash</p>
        <p>1.0.19 Better typescript support (thanks <a href="https://github.com/1two">1two</a>)</p>
        <p>1.0.18 Add typescript/es6 support</p>
        <p>1.0.17 Bug fixes</p>

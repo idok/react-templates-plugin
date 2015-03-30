@@ -61,13 +61,18 @@ public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
             final String text = context.getText();
             int startIndex;
             int endIndex = -1;
+            if (text.length() < 2) {
+                return;
+            }
             do {startIndex = text.indexOf(start, endIndex);
                 int afterStart = startIndex + start.length();
                 endIndex = startIndex >= 0 ? text.indexOf(end, afterStart) : -1;
                 endIndex = endIndex > 0 ? endIndex : text.length() - 1;
                 final PsiElement injectionCandidate = startIndex >= 0 ? context.findElementAt(startIndex) : null;
                 if (injectionCandidate != null && injectionCandidate.getNode().getElementType() != XmlTokenType.XML_COMMENT_CHARACTERS && !(injectionCandidate instanceof OuterLanguageElement)) {
-                    inject(registrar, context, new TextRange(afterStart, endIndex));
+                    if (afterStart < endIndex) {
+                        inject(registrar, context, new TextRange(afterStart, endIndex));
+                    }
 //                    System.out.println(new TextRange(afterStart, endIndex));
                 }
             } while (startIndex >= 0);
