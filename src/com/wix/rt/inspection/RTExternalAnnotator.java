@@ -104,6 +104,10 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         if (document == null) {
             return;
         }
+        if (annotationResult.result == null) {
+            LOG.warn("annotationResult.result == null");
+            return;
+        }
         for (VerifyMessage warn : annotationResult.result.warns) {
             TextAttributes forcedTextAttributes = InspectionUtil.getTextAttributes(colorsScheme, severityRegistrar, severity);
             /*Annotation annotation = */
