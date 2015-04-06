@@ -14,6 +14,7 @@ import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTokenType;
 import com.wix.rt.actions.RTActionUtil;
+import com.wix.rt.build.RTFileUtil;
 import com.wix.rt.codeInsight.DirectiveUtil;
 import com.wix.rt.codeInsight.RTAttributes;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,7 @@ import java.util.List;
 public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
     @Override
     public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
+        if (!RTFileUtil.isRTFile(context.getContainingFile())) return;
         final Project project = context.getProject();
         if (!RTActionUtil.isRTEnabled(project)) return;
 

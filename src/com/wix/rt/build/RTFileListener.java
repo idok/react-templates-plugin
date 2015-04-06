@@ -72,7 +72,7 @@ public class RTFileListener {
     }
 
     private void fileChanged(@NotNull VirtualFile file) {
-        if (RTFileUtil.isRTFile(file) && !project.isDisposed()) {
+        if ((RTFileUtil.isRTFile(file) || RTFileUtil.isJSRTFile(file)) && !project.isDisposed()) {
 //            restartAnalyzer();
             compile(file);
         }
@@ -85,7 +85,7 @@ public class RTFileListener {
     public static void compile(@NotNull final VirtualFile file, @NotNull final Project project) {
         RTProjectComponent component = project.getComponent(RTProjectComponent.class);
         if (!component.isEnabled()) {
-           return;
+            return;
         }
         Runnable runnable = new Runnable() {
             @Override
@@ -101,7 +101,6 @@ public class RTFileListener {
         };
 
 //        ApplicationManager.getApplication().runWriteAction()
-
 
 
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
@@ -200,7 +199,7 @@ public class RTFileListener {
         }
 
         @Override
-        public void propertyChanged(@NotNull VirtualFilePropertyEvent event){
+        public void propertyChanged(@NotNull VirtualFilePropertyEvent event) {
 //            System.out.println("propertyChanged " + event.getFileName());
             VirtualFile file = event.getFile();
             if (event.getPropertyName().equals(NAME) && RTFileUtil.isRTFile(file)) { //and file is rt with rt.js
@@ -211,8 +210,7 @@ public class RTFileListener {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     //try a .ts file
                     jsFile = file.getParent().findChild(RTFileUtil.getTsRTFileName((String) event.getOldValue()));
                     if (jsFile != null) {

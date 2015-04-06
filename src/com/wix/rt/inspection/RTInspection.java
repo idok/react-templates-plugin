@@ -119,14 +119,14 @@ public class RTInspection extends LocalInspectionTool implements UnfairLocalInsp
         singleConfigurableEditor.show();
     }
 
-    @Override
-    public boolean isSuppressedFor(@NotNull PsiElement element) {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
-        return new SuppressQuickFix[0];
-    }
+//    @Override
+//    public boolean isSuppressedFor(@NotNull PsiElement element) {
+//        return false;
+//    }
+//
+//    @NotNull
+//    @Override
+//    public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
+//        return new SuppressQuickFix[0];
+//    }
 }

@@ -1,7 +1,7 @@
 package com.wix.rt;
 
 import com.intellij.lang.documentation.DocumentationProviderEx;
-import com.intellij.lang.javascript.index.JSNamedElementProxy;
+//import com.intellij.lang.javascript.index.JSNamedElementProxy;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;

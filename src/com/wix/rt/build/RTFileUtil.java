@@ -57,6 +57,10 @@ public final class RTFileUtil {
         return file != null && file.getFileType().equals(RTFileType.INSTANCE); // file.getName().equals(RTFileType.ESLINTRC);
     }
 
+    public static boolean isJSRTFile(VirtualFile file) {
+        return file != null && file.getName().endsWith(".jsrt");
+    }
+
     public static boolean isRTFile(PsiFile file) {
 //        return file != null && file.getFileType().equals(RTFileType.INSTANCE); for some reason file type is html, so we'll test ext
         return file != null && hasRTExt(file.getVirtualFile());

@@ -3,7 +3,7 @@ package com.wix.rt.codeInsight;
 import com.intellij.codeInsight.completion.XmlTagInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.lang.javascript.index.JSNamedElementProxy;
+//import com.intellij.lang.javascript.index.JSNamedElementProxy;
 import com.intellij.psi.html.HtmlTag;
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider;
 import com.intellij.psi.xml.XmlFile;
@@ -38,9 +38,9 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
 //        });
     }
 
-    private static void addLookupItem(List<LookupElement> elements, JSNamedElementProxy directive) {
-        elements.add(LookupElementBuilder.create(directive).withInsertHandler(XmlTagInsertHandler.INSTANCE));
-    }
+//    private static void addLookupItem(List<LookupElement> elements, JSNamedElementProxy directive) {
+//        elements.add(LookupElementBuilder.create(directive).withInsertHandler(XmlTagInsertHandler.INSTANCE));
+//    }
 
     @Nullable
     @Override
