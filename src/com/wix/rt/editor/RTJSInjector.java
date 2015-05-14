@@ -17,7 +17,9 @@ import com.wix.rt.actions.RTActionUtil;
 import com.wix.rt.build.RTFileUtil;
 import com.wix.rt.codeInsight.DirectiveUtil;
 import com.wix.rt.codeInsight.RTAttributes;
+import com.wix.rt.lang.RTLanguage;
 import org.jetbrains.annotations.NotNull;
+import sun.plugin2.message.JavaScriptBaseMessage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +42,13 @@ public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
                 inject(registrar, context, new TextRange(start, length - end));
                 return;
             }
+
+            if (attributeName.equals("rt-props")) {
+                registrar.startInjecting(RTLanguage.INSTANCE)
+                        .addPlace(null, null, (PsiLanguageInjectionHost) context, new TextRange(start, length - end))
+                        .doneInjecting();
+                return;
+            }
 //            if (RTAttributes.isJSExpressionAttribute((XmlAttribute) parent) && length > 1) {
 //                inject(registrar, context, new TextRange(0, length));
 //                return;
@@ -50,9 +59,9 @@ public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
             }
         }
 
-        if (context instanceof XmlAttributeValueImpl) {
-            System.out.println(((XmlAttributeValueImpl) context).getValue());
-        }
+//        if (context instanceof XmlAttributeValueImpl) {
+//            System.out.println(((XmlAttributeValueImpl) context).getValue());
+//        }
 
         if (context instanceof XmlTextImpl || context instanceof XmlAttributeValueImpl) {
             final String start = RTJSBracesUtil.getInjectionStart(project);
@@ -60,13 +69,14 @@ public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
 
             if (RTJSBracesUtil.hasConflicts(start, end, context)) return;
 
-            final String text = context.getText();
+            final String  text = context.getText();
             int startIndex;
             int endIndex = -1;
             if (text.length() < 2) {
                 return;
             }
-            do {startIndex = text.indexOf(start, endIndex);
+            do {
+                startIndex = text.indexOf(start, endIndex);
                 int afterStart = startIndex + start.length();
                 endIndex = startIndex >= 0 ? text.indexOf(end, afterStart) : -1;
                 endIndex = endIndex > 0 ? endIndex : text.length() - 1;
@@ -82,7 +92,7 @@ public class RTJSInjector implements MultiHostInjector, JSTargetedInjector {
     }
 
     private static void inject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context, TextRange textRange) {
-        registrar.startInjecting(JavascriptLanguage.INSTANCE)
+        registrar.startInjecting(RTLanguage.INSTANCE)
                 .addPlace(null, null, (PsiLanguageInjectionHost) context, textRange)
                 .doneInjecting();
     }

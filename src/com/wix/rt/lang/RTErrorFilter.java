@@ -34,6 +34,7 @@ public class RTErrorFilter extends HighlightErrorFilter {
 //            }
 //        }
         if (HTMLLanguage.INSTANCE.is(language) && error.getErrorDescription().endsWith("not closed")) {
+            System.out.println(error.getErrorDescription());
             final PsiElement parent = error.getParent();
             final XmlElementDescriptor descriptor = parent instanceof XmlTag ? ((XmlTag) parent).getDescriptor() : null;
             return !(descriptor instanceof RTRequireTagDescriptor);

@@ -96,21 +96,22 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         SeverityRegistrar severityRegistrar = inspectionProjectProfileManager.getSeverityRegistrar();
         HighlightDisplayKey inspectionKey = RTInspection.getHighlightDisplayKey();
         HighlightSeverity severity = InspectionUtil.getSeverity(inspectionProjectProfileManager, inspectionKey, file);
-//      RTProjectComponent component = annotationResult.input.project.getComponent(RTProjectComponent.class);
-//      HighlightSeverity severity = getHighlightSeverity(warn, component.treatAsWarnings);
+//        RTProjectComponent component = annotationResult.input.project.getComponent(RTProjectComponent.class);
+//        HighlightSeverity severity = getHighlightSeverity(warn, component.treatAsWarnings);
         EditorColorsScheme colorsScheme = annotationResult.input.colorsScheme;
 
         Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
         if (document == null) {
             return;
         }
-        if (annotationResult.result == null) {
+        if (annotationResult == null || annotationResult.result == null || annotationResult.result.warns == null) {
             LOG.warn("annotationResult.result == null");
             return;
         }
         for (VerifyMessage warn : annotationResult.result.warns) {
             TextAttributes forcedTextAttributes = InspectionUtil.getTextAttributes(colorsScheme, severityRegistrar, severity);
             /*Annotation annotation = */
+            severity = getHighlightSeverity(warn, false);
             createAnnotation(holder, file, document, warn, severity, forcedTextAttributes, true);
 //            if (annotation != null) {
 //                int offset = StringUtil.lineColToOffset(document.getText(), warn.line - 1, warn.column);
@@ -272,6 +273,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         } catch (Exception e) {
             LOG.error("Error running RT inspection: ", e);
             showNotification("Error running RT inspection: " + e.getMessage(), NotificationType.ERROR);
+//            return new ExternalLintAnnotationResult<Result>(collectedInfo, result); file level annotation
         } finally {
             if (actualCodeFile != null) {
                 actualCodeFile.deleteTemp();

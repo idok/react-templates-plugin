@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.21</version>
+    <version>1.0.24</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,6 +14,9 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.24 branch 141 - IntelliJ IDEA 14.1, WebStorm 10, PyCharm 4.1 support</p>
+       <p>1.0.23 branch 139 - IntelliJ IDEA 14, WebStorm 9, PyCharm 4, PhpStorm 8, RubyMine 7 support</p>
+       <p>1.0.22 Better suppoort for rt syntax, project template and live template</p>
        <p>1.0.21 Bug fixes</p>
        <p>1.0.20 Fix crash</p>
        <p>1.0.19 Better typescript support (thanks <a href="https://github.com/1two">1two</a>)</p>
@@ -39,7 +42,7 @@
     ]]></change-notes>
 
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="131"/>
+    <idea-version since-build="140"/>
 
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
@@ -63,7 +66,19 @@
         <xml.util.htmlDoctypeProvider implementation="com.wix.rt.codeInsight.RTDocTypeProvider" order="first"/>
         <xml.xmlExtension implementation="com.wix.rt.codeInsight.RTHtmlExtension" order="first"/>
 
+        <!--<gotoSymbolContributor implementation="org.angularjs.navigation.AngularGotoSymbolContributor"/>-->
+        <!--<lang.documentationProvider language="HTML" implementationClass="org.angularjs.AngularJSDocumentationProvider" />-->
+        <!--<lang.documentationProvider language="JavaScript" implementationClass="org.angularjs.AngularJSDocumentationProvider" order="first"/>-->
+        <lang.parserDefinition language="RT" implementationClass="com.wix.rt.lang.parser.RTParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="RT" implementationClass="com.wix.rt.lang.RTSyntaxHighlighterFactory"/>
+        <!--<psi.referenceContributor implementation="org.angularjs.codeInsight.refs.AngularJSReferencesContributor"/>-->
+        <highlightErrorFilter implementation="com.wix.rt.lang.RTErrorFilter" />
+        <daemon.highlightInfoFilter implementation="com.wix.rt.lang.RTInfoFilter" />
         <multiHostInjector implementation="com.wix.rt.editor.RTJSInjector"/>
+
+        <directoryProjectGenerator implementation="com.wix.rt.RTProjectGenerator"/>
+        <projectTemplatesFactory implementation="com.wix.rt.RTTemplateFactory"/>
+        <defaultLiveTemplatesProvider implementation="com.wix.rt.RTTemplatesProvider"/>
         <!--<html.embeddedTokenTypesProvider implementation="com.wix.rt.RTEmbeddedTokenTypesProvider" />-->
 
         <treeStructureProvider implementation="com.wix.rt.projectView.RTMergerTreeStructureProvider" />
