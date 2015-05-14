@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.21</version>
+    <version>1.0.23</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,6 +14,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.23 Compatibility with branch 139 - IntelliJ IDEA 14, WebStorm 9, PyCharm 4, PhpStorm 8, RubyMine 7</p>
        <p>1.0.21 Bug fixes</p>
        <p>1.0.20 Fix crash</p>
        <p>1.0.19 Better typescript support (thanks <a href="https://github.com/1two">1two</a>)</p>
@@ -39,7 +40,7 @@
     ]]></change-notes>
 
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="131"/>
+    <idea-version since-build="131" until-build="140" />
 
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
