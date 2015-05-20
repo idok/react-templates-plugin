@@ -115,11 +115,13 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="com.wix.rt.switch" class="com.wix.rt.actions.SwitchViewAction" text="Switch to Controller" icon="/icons/fileTypes/rt.png"
-                description="Build React Template">
+        <action id="com.wix.rt.switch" class="com.wix.rt.actions.SwitchViewAction" text="Switch to Controller" icon="/icons/fileTypes/rt.png" description="Build React Template">
             <!--<add-to-group group-id="BuildMenu" anchor="last"/>-->
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift T"/>
+            <!--<keyboard-shortcut keymap="Eclipse" first-keystroke="shift alt F11" replace-all="true"/>-->
+            <!--<keyboard-shortcut keymap="Visual Studio" first-keystroke="shift alt F11" replace-all="true"/>-->
         </action>
         <action id="com.wix.rt" class="com.wix.rt.actions.BuildTemplateAction" text="Build React Template" icon="/icons/fileTypes/rt.png"
                 description="Build React Template">
