@@ -75,13 +75,13 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
 //        return rtName.substring(0, rtName.length() - 2) + "ts";
 //    }
 
-    private static String getJSControllerName( VirtualFile rtFile ) {
+    public static String getJSControllerName(VirtualFile rtFile) {
         return rtFile.getNameWithoutExtension() + ".js";
     }
-    private static String getTSControllerName( VirtualFile rtFile ) {
+
+    public static String getTSControllerName(VirtualFile rtFile) {
         return rtFile.getNameWithoutExtension() + ".ts";
     }
-
 
     @NotNull
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {

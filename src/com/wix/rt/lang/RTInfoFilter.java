@@ -12,7 +12,7 @@ public class RTInfoFilter implements HighlightInfoFilter {
 
     @Override
     public boolean accept(HighlightInfo highlightInfo, PsiFile psiFile) {
-        if (psiFile.getName().endsWith(".rt") && MSG_EMPTY_TAG.equals(highlightInfo.getDescription())) {
+        if (psiFile != null && psiFile.getName().endsWith(".rt") && MSG_EMPTY_TAG.equals(highlightInfo.getDescription())) {
             return false;
         }
 //        System.out.println(highlightInfo.getSeverity() + " " + highlightInfo.getDescription());
