@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.25</version>
+    <version>1.0.26</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,10 +14,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.26 Fix NPE</p>
        <p>1.0.25 Fix NPE and add switch to controller/code behind file</p>
        <p>1.0.24 branch 141 - IntelliJ IDEA 14.1, WebStorm 10, PyCharm 4.1 support</p>
        <p>1.0.23 branch 139 - IntelliJ IDEA 14, WebStorm 9, PyCharm 4, PhpStorm 8, RubyMine 7 support</p>
-       <p>1.0.22 Better suppoort for rt syntax, project template and live template</p>
+       <p>1.0.22 Better support for rt syntax, project template and live template</p>
        <p>1.0.21 Bug fixes</p>
        <p>1.0.20 Fix crash</p>
        <p>1.0.19 Better typescript support (thanks <a href="https://github.com/1two">1two</a>)</p>
