@@ -55,7 +55,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
     private static Map<String, ProjectViewNode> map(ProjectViewNode[] copy) {
         Map<String, ProjectViewNode> rtJsFiles = new HashMap<String, ProjectViewNode>();
         for (ProjectViewNode element : copy) {
-            if (RTFileUtil.isRTJSFile(element.getVirtualFile()) || hasJsExt(element.getVirtualFile()) || hasTsExt( element.getVirtualFile() )) {
+            if (RTFileUtil.isRTJSFile(element.getVirtualFile()) || hasJsExt(element.getVirtualFile()) || hasTsExt(element.getVirtualFile())) {
                 rtJsFiles.put(element.getVirtualFile().getName(), element);
             }
         }
@@ -93,7 +93,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         RTProjectComponent comp = project.getComponent(RTProjectComponent.class);
         boolean groupOther = comp.settings.groupOther;
 
-        // Optimization. Check if there are any forms at all.
+        // Optimization. Check if there are any RT files at all.
         boolean formsFound = hasRTFiles(children);
         if (!formsFound) return children;
 
@@ -132,7 +132,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
                 }
                 else {
                     //try with a ts file
-                    name = RTFileUtil.getTsRTFileName( element.getVirtualFile().getName() );
+                    name = RTFileUtil.getTsRTFileName(element.getVirtualFile().getName());
                     if (rtJsFiles.containsKey(name)) {
                         rtJsNode = rtJsFiles.get(name);
                     }

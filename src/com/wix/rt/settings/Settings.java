@@ -14,6 +14,7 @@ public class Settings implements PersistentStateComponent<Settings> {
     public String builtinRulesPath = "";
     public String rtExecutable = "";
     public String nodeInterpreter;
+    public String targetVersion;
     public boolean treatAllIssuesAsWarnings;
     public boolean pluginEnabled;
     public String modules = RTRunner.AMD;
@@ -45,6 +46,6 @@ public class Settings implements PersistentStateComponent<Settings> {
     }
 
     public String getVersion() {
-        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController;
+        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController + targetVersion;
     }
 }

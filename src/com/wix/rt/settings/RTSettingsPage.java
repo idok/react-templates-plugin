@@ -62,6 +62,9 @@ public class RTSettingsPage implements Configurable {
     private JCheckBox groupOtherFilesCheckBox;
     private JRadioButton ES6RadioButton;
     private JRadioButton typescriptRadioButton;
+    private JComboBox<String> comboBoxTargetVersion;
+    private JLabel targetVersionLabel;
+    private JCheckBox reactNativeCheckBox;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
     public RTSettingsPage(@NotNull final Project project) {
@@ -145,6 +148,8 @@ public class RTSettingsPage implements Configurable {
         AMDRadioButton.setEnabled(enabled);
         ES6RadioButton.setEnabled(enabled);
         typescriptRadioButton.setEnabled(enabled);
+        comboBoxTargetVersion.setEnabled(enabled);
+        targetVersionLabel.setEnabled(enabled);
         modulesLabel.setEnabled(enabled);
         groupOtherFilesCheckBox.setEnabled(enabled);
     }
@@ -194,6 +199,13 @@ public class RTSettingsPage implements Configurable {
         try {
             String version = RTRunner.runVersion(settings);
             versionLabel.setText(version.trim());
+
+            List<String> versions = RTRunner.listTargetVersions(settings);
+            String[] array = new String[versions.size()];
+            comboBoxTargetVersion.setModel(new DefaultComboBoxModel<String>(versions.toArray(array)));
+//            for (String s : versions) {
+//                comboBoxTargetVersion.addItem(s);
+//            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
@@ -253,6 +265,11 @@ public class RTSettingsPage implements Configurable {
         return field.getChildComponent().getText().equals(value);
     }
 
+    private static boolean areEqual(JComboBox<?> field, String value) {
+        Object item = field.getSelectedItem();
+        return item == null && value == null || item != null && item.equals(value);
+    }
+
     @Override
     public boolean isModified() {
         Settings s = getSettings();
@@ -260,6 +277,7 @@ public class RTSettingsPage implements Configurable {
                 !areEqual(rtBinField, s.rtExecutable) ||
                 !getModules().equals(s.modules) ||
                 groupController.isSelected() != s.groupController ||
+                !areEqual(comboBoxTargetVersion, s.targetVersion) ||
                 !areEqual(nodeInterpreterField, s.nodeInterpreter);
     }
 
@@ -278,6 +296,7 @@ public class RTSettingsPage implements Configurable {
         settings.modules = getModules();
         settings.groupController = groupController.isSelected();
         settings.groupOther = groupOtherFilesCheckBox.isSelected();
+        settings.targetVersion = (String) comboBoxTargetVersion.getSelectedItem();
         project.getComponent(RTProjectComponent.class).validateSettings();
         DaemonCodeAnalyzer.getInstance(project).restart();
     }
@@ -302,6 +321,7 @@ public class RTSettingsPage implements Configurable {
 
         groupController.setSelected(settings.groupController);
         groupOtherFilesCheckBox.setSelected(settings.groupOther);
+        comboBoxTargetVersion.setSelectedItem(settings.targetVersion);
         setEnabledState(settings.pluginEnabled);
     }
 

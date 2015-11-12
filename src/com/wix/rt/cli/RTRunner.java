@@ -92,6 +92,31 @@ public final class RTRunner {
         return result;
     }
 
+    public static List<String> listTargetVersions(@NotNull String cwd, @NotNull String node, @NotNull String rtBin) {
+        RTSettings settings = RTSettings.build(cwd, node, rtBin);
+        return listTargetVersions(settings);
+    }
+
+    public static List<String> listTargetVersions(RTSettings settings) {
+        try {
+            GeneralCommandLine commandLine = RTCliBuilder.listVersions(settings);
+            ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
+            return parseVersions(output.getStdout());
+        } catch (ExecutionException e) {
+            LOG.warn("Could not build react-templates file", e);
+            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
+            e.printStackTrace();
+        }
+        return new ArrayList<String>();
+    }
+
+    private static List<String> parseVersions(String json) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson g = builder.setPrettyPrinting().create();
+        Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+        return g.fromJson(json, listType);
+    }
+
     public static Result compile(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
         RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, true);
         Result result = new Result();
@@ -130,8 +155,7 @@ public final class RTRunner {
         GsonBuilder builder = new GsonBuilder();
 //        builder.registerTypeAdapterFactory(adapter);
         Gson g = builder.setPrettyPrinting().create();
-        Type listType = new TypeToken<ArrayList<VerifyMessage>>() {
-        }.getType();
+        Type listType = new TypeToken<ArrayList<VerifyMessage>>() {}.getType();
         return g.fromJson(json, listType);
     }
 }

@@ -94,7 +94,7 @@ public class CreateRTAction extends AbstractCreateFormAction {
     private static String getControllerTemplate(String name, String modules) {
         String s = "";
         try {
-            String tplName = ( RTRunner.TYPESCRIPT.equals( modules ) ? "/fileTemplates/internal/RT Controller File typescript.ts.ft" : "/fileTemplates/internal/RT Controller File " + modules + ".js.ft" );
+            String tplName = RTRunner.TYPESCRIPT.equals(modules) ? "/fileTemplates/internal/RT Controller File typescript.ts.ft" : "/fileTemplates/internal/RT Controller File " + modules + ".js.ft";
             s = FileUtil.loadTextAndClose(CreateRTAction.class.getResourceAsStream(tplName));
             s = StringUtil.replace(s, "$name$", name);
         } catch (IOException e) {
@@ -126,9 +126,9 @@ public class CreateRTAction extends AbstractCreateFormAction {
             if (createController) {
                 // TODO generate according to selected modules
                 String modules = Settings.getInstance(project).modules;
-                final String controllerFileName = newName + ( RTRunner.TYPESCRIPT.equals( modules ) ? ".ts" : ".js");
+                final String controllerFileName = newName + (RTRunner.TYPESCRIPT.equals(modules) ? ".ts" : ".js");
                 final String controllerBody = getControllerTemplate(newName, modules);
-                final LanguageFileType fileType = ( RTRunner.TYPESCRIPT.equals( modules ) ? TypeScriptFileType.INSTANCE : JavaScriptFileType.INSTANCE);
+                final LanguageFileType fileType = RTRunner.TYPESCRIPT.equals(modules) ? TypeScriptFileType.INSTANCE : JavaScriptFileType.INSTANCE;
                 final PsiFile controllerFile = PsiFileFactory.getInstance(project).createFileFromText(controllerFileName, fileType, controllerBody);
                 createdControllerFile = directory.add(controllerFile);
                 return new PsiElement[]{createdFile, createdControllerFile};

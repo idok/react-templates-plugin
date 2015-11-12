@@ -153,7 +153,7 @@ public class RTFileListener {
     /**
      * VFS Listener
      */
-    private class RTFileVfsListener extends VirtualFileAdapter {
+    private final class RTFileVfsListener extends VirtualFileAdapter {
         private RTFileVfsListener() {
         }
 
@@ -228,7 +228,7 @@ public class RTFileListener {
     /**
      * Document Listener
      */
-    private class RTFileDocumentListener extends DocumentAdapter {
+    private final class RTFileDocumentListener extends DocumentAdapter {
         private RTFileDocumentListener() {
         }
 
