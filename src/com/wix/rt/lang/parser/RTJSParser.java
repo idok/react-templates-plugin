@@ -2,17 +2,14 @@ package com.wix.rt.lang.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.javascript.*;
-import com.intellij.lang.javascript.parsing.ExpressionParser;
-import com.intellij.lang.javascript.parsing.FunctionParser;
-import com.intellij.lang.javascript.parsing.JavaScriptParser;
-import com.intellij.lang.javascript.parsing.StatementParser;
+import com.intellij.lang.javascript.parsing.*;
 import com.intellij.psi.tree.IElementType;
 import com.wix.rt.lang.lexer.RTTokenTypes;
 
 /**
  * @author Dennis.Ushakov
  */
-public class RTJSParser extends JavaScriptParser<RTJSParser.RTExpressionParser, StatementParser, FunctionParser> {
+public class RTJSParser extends JavaScriptParser<RTJSParser.RTExpressionParser, StatementParser, FunctionParser, JSPsiTypeParser> {
     public RTJSParser(PsiBuilder builder) {
         super(JavaScriptSupportLoader.JAVASCRIPT_1_5, builder);
         myExpressionParser = new RTExpressionParser();
