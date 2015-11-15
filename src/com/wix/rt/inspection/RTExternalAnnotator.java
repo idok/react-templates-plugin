@@ -33,6 +33,7 @@ import com.wix.rt.build.RTFileUtil;
 import com.wix.rt.build.Result;
 import com.wix.rt.build.VerifyMessage;
 import com.wix.rt.cli.RTRunner;
+import com.wix.rt.cli.RTSettings;
 import com.wix.utils.Delayer;
 import com.wix.utils.FileUtils;
 import com.wix.utils.PsiUtil;
@@ -104,7 +105,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         if (document == null) {
             return;
         }
-        if (annotationResult == null || annotationResult.result == null || annotationResult.result.warns == null) {
+        if (annotationResult.result == null || annotationResult.result.warns == null) {
             LOG.warn("annotationResult.result == null");
             return;
         }
@@ -222,7 +223,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         }
         Project project = psiFile.getProject();
         RTProjectComponent component = project.getComponent(RTProjectComponent.class);
-        if (!component.isSettingsValid() || !component.isEnabled()) {
+        if (!component.isValidAndEnabled()) {
             return null;
         }
         Document document = PsiDocumentManager.getInstance(project).getDocument(psiFile);
@@ -233,7 +234,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         if (StringUtil.isEmptyOrSpaces(fileContent)) {
             return null;
         }
-        EditorColorsScheme colorsScheme = editor != null ? editor.getColorsScheme() : null;
+        EditorColorsScheme colorsScheme = editor == null ? null : editor.getColorsScheme();
 //        tabSize = getTabSize(editor);
 //        tabSize = 4;
         return new ExternalLintAnnotationInput(project, psiFile, fileContent, colorsScheme);
@@ -247,7 +248,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
             PsiFile file = collectedInfo.psiFile;
             if (!RTFileUtil.isRTFile(file)) return null;
             RTProjectComponent component = file.getProject().getComponent(RTProjectComponent.class);
-            if (!component.isSettingsValid() || !component.isEnabled()) {
+            if (!component.isValidAndEnabled()) {
                 return null;
             }
 
@@ -256,8 +257,9 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
             if (actualCodeFile == null || actualCodeFile.getActualFile() == null) {
                 return null;
             }
-            relativeFile = FileUtils.makeRelative(new File(file.getProject().getBasePath()), actualCodeFile.getFile());
-            Result result = RTRunner.compile(file.getProject().getBasePath(), relativeFile, component.nodeInterpreter, component.rtExecutable, component.settings.modules);
+            relativeFile = FileUtils.makeRelative(new File(file.getProject().getBasePath()), actualCodeFile.getActualFile());
+            RTSettings settings = RTSettings.build(component.settings, file.getProject().getBasePath(), relativeFile);
+            Result result = RTRunner.compile(settings);
 
             if (StringUtils.isNotEmpty(result.errorOutput)) {
                 component.showInfoNotification(result.errorOutput, NotificationType.WARNING);

@@ -14,6 +14,7 @@ import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import com.wix.rt.RTProjectComponent;
+import com.wix.rt.cli.RTSettings;
 import com.wix.rt.settings.Settings;
 import com.wix.rt.cli.RTRunner;
 import org.jetbrains.annotations.NotNull;
@@ -84,7 +85,7 @@ public class RTFileListener {
 
     public static void compile(@NotNull final VirtualFile file, @NotNull final Project project) {
         RTProjectComponent component = project.getComponent(RTProjectComponent.class);
-        if (!component.isEnabled()) {
+        if (!component.shouldCompileRT()) {
             return;
         }
         Runnable runnable = new Runnable() {
@@ -92,7 +93,8 @@ public class RTFileListener {
             public void run() {
                 try {
                     Settings settings = Settings.getInstance(project);
-                    Result out = RTRunner.build(project.getBasePath(), file.getPath(), settings.nodeInterpreter, settings.rtExecutable, settings.modules);
+                    RTSettings rtSettings = RTSettings.build(settings, project.getBasePath(), file.getPath());
+                    Result out = RTRunner.build(rtSettings);
                 } catch (Exception e1) {
                     e1.printStackTrace();
 //                    warn(project, e1.toString());
@@ -112,7 +114,8 @@ public class RTFileListener {
                     public void run(@NotNull ProgressIndicator indicator) {
                         try {
                             Settings settings = Settings.getInstance(project);
-                            Result out = RTRunner.build(project.getBasePath(), file.getPath(), settings.nodeInterpreter, settings.rtExecutable, settings.modules);
+                            RTSettings rtSettings = RTSettings.build(settings, project.getBasePath(), file.getPath());
+                            Result out = RTRunner.build(rtSettings);
                             file.getParent().refresh(false, false);
                         } catch (Exception e1) {
                             e1.printStackTrace();

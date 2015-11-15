@@ -14,6 +14,7 @@ final class RTCliBuilder {
     public static final String DRY_RUN = "--dry-run";
     public static final String FORCE = "--force";
     public static final String FORMAT = "--format";
+    public static final String NATIVE = "--native";
     public static final String JSON = "json";
     public static final String LIST_TARGET_VERSION = "--list-target-version";
     public static final String V = "-v";
@@ -53,6 +54,9 @@ final class RTCliBuilder {
         commandLine.addParameter(settings.modules);
         if (settings.dryRun) {
             commandLine.addParameter(DRY_RUN);
+        }
+        if (settings.reactNative) {
+            commandLine.addParameter(NATIVE);
         }
         commandLine.addParameter(FORMAT);
         commandLine.addParameter(JSON);

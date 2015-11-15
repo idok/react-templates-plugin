@@ -46,15 +46,16 @@ public final class RTRunner {
         return NodeRunner.execute(commandLine, TIME_OUT);
     }
 
-    public static Result build(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
-        RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, false);
+    public static Result build(@NotNull RTSettings settings) {
+//    public static Result build(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
+//        RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, false, false);
         Result result = new Result();
         try {
             ProcessOutput output = RTRunner.convertFile(settings);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {
             LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, NotificationType.WARNING);
+            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
             e.printStackTrace();
         }
         return result;
@@ -123,8 +124,8 @@ public final class RTRunner {
         return g.fromJson(json, listType);
     }
 
-    public static Result compile(@NotNull String cwd, @NotNull String path, @NotNull String node, @NotNull String rtBin, @NotNull String modules) {
-        RTSettings settings = RTSettings.build(cwd, node, rtBin, path, modules, true);
+    public static Result compile(RTSettings settings) {
+        settings.dryRun = true;
         Result result = new Result();
         try {
             GeneralCommandLine commandLine = RTCliBuilder.createCommandLineValidate(settings);
@@ -132,7 +133,7 @@ public final class RTRunner {
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {
             LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, NotificationType.WARNING);
+            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
             e.printStackTrace();
         }
         return result;

@@ -20,6 +20,8 @@ public class Settings implements PersistentStateComponent<Settings> {
     public String modules = RTRunner.AMD;
     public boolean groupController = true;
     public boolean groupOther = true;
+    public boolean watchAndCompileRT = true;
+    public boolean reactNative;
     /**
      * @deprecated
      */
@@ -46,6 +48,6 @@ public class Settings implements PersistentStateComponent<Settings> {
     }
 
     public String getVersion() {
-        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController + targetVersion;
+        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController + targetVersion + reactNative + watchAndCompileRT;
     }
 }

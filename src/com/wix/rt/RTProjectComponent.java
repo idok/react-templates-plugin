@@ -64,9 +64,8 @@ public class RTProjectComponent implements ProjectComponent {
 
     @Override
     public void initComponent() {
-        if (isEnabled()) {
+        if (shouldCompileRT()) {
             isSettingsValid();
-            RTFileListener.start(project);
         }
     }
 
@@ -91,6 +90,15 @@ public class RTProjectComponent implements ProjectComponent {
         return Settings.getInstance(project).pluginEnabled;
     }
 
+    public boolean shouldCompileRT() {
+        Settings s = Settings.getInstance(project);
+        return s.pluginEnabled && s.watchAndCompileRT;
+    }
+
+    public boolean isValidAndEnabled() {
+        return isSettingsValid() && isEnabled();
+    }
+
     public static boolean isEnabled(@NotNull final Project project) {
         RTProjectComponent component = project.getComponent(RTProjectComponent.class);
         return component.isEnabled();
@@ -106,7 +114,7 @@ public class RTProjectComponent implements ProjectComponent {
 
     public boolean validateSettings() {
         // do not validate if disabled
-        if (!settings.pluginEnabled) {
+        if (!shouldCompileRT()) {
             RTFileListener.stop(project);
             return true;
         }

@@ -65,6 +65,7 @@ public class RTSettingsPage implements Configurable {
     private JComboBox<String> comboBoxTargetVersion;
     private JLabel targetVersionLabel;
     private JCheckBox reactNativeCheckBox;
+    private JCheckBox watchAndCompileRtCheckBox;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
     public RTSettingsPage(@NotNull final Project project) {
@@ -151,6 +152,8 @@ public class RTSettingsPage implements Configurable {
         comboBoxTargetVersion.setEnabled(enabled);
         targetVersionLabel.setEnabled(enabled);
         modulesLabel.setEnabled(enabled);
+        reactNativeCheckBox.setEnabled(enabled);
+        watchAndCompileRtCheckBox.setEnabled(enabled);
         groupOtherFilesCheckBox.setEnabled(enabled);
     }
 
@@ -270,13 +273,19 @@ public class RTSettingsPage implements Configurable {
         return item == null && value == null || item != null && item.equals(value);
     }
 
+    private static boolean areEqual(JCheckBox field, boolean value) {
+        return field.isSelected() == value;
+    }
+
     @Override
     public boolean isModified() {
         Settings s = getSettings();
-        return pluginEnabledCheckbox.isSelected() != s.pluginEnabled ||
+        return !areEqual(pluginEnabledCheckbox, s.pluginEnabled) ||
                 !areEqual(rtBinField, s.rtExecutable) ||
                 !getModules().equals(s.modules) ||
-                groupController.isSelected() != s.groupController ||
+                !areEqual(groupController, s.groupController) ||
+                !areEqual(watchAndCompileRtCheckBox, s.watchAndCompileRT) ||
+                !areEqual(reactNativeCheckBox, s.reactNative) ||
                 !areEqual(comboBoxTargetVersion, s.targetVersion) ||
                 !areEqual(nodeInterpreterField, s.nodeInterpreter);
     }
@@ -295,7 +304,9 @@ public class RTSettingsPage implements Configurable {
         settings.nodeInterpreter = nodeInterpreterField.getChildComponent().getText();
         settings.modules = getModules();
         settings.groupController = groupController.isSelected();
+        settings.reactNative = reactNativeCheckBox.isSelected();
         settings.groupOther = groupOtherFilesCheckBox.isSelected();
+        settings.watchAndCompileRT = watchAndCompileRtCheckBox.isSelected();
         settings.targetVersion = (String) comboBoxTargetVersion.getSelectedItem();
         project.getComponent(RTProjectComponent.class).validateSettings();
         DaemonCodeAnalyzer.getInstance(project).restart();
@@ -320,6 +331,8 @@ public class RTSettingsPage implements Configurable {
         }
 
         groupController.setSelected(settings.groupController);
+        reactNativeCheckBox.setSelected(settings.reactNative);
+        watchAndCompileRtCheckBox.setSelected(settings.watchAndCompileRT);
         groupOtherFilesCheckBox.setSelected(settings.groupOther);
         comboBoxTargetVersion.setSelectedItem(settings.targetVersion);
         setEnabledState(settings.pluginEnabled);
