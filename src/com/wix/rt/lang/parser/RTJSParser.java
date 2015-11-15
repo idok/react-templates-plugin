@@ -9,7 +9,7 @@ import com.wix.rt.lang.lexer.RTTokenTypes;
 /**
  * @author Dennis.Ushakov
  */
-public class RTJSParser extends JavaScriptParser<RTJSParser.RTExpressionParser, StatementParser, FunctionParser, JSPsiTypeParser> {
+public class RTJSParser extends JavaScriptParser<RTJSParser.RTExpressionParser, StatementParser, FunctionParser> {
     public RTJSParser(PsiBuilder builder) {
         super(JavaScriptSupportLoader.JAVASCRIPT_1_5, builder);
         myExpressionParser = new RTExpressionParser();
