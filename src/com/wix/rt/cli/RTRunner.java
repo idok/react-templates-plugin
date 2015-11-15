@@ -24,6 +24,12 @@ public final class RTRunner {
     private RTRunner() {
     }
 
+    public static final String FORCE = "--force";
+    public static final String OUTDATED = "outdated";
+    public static final String REACT_TEMPLATES = "react-templates";
+    public static final String G = "-g";
+    public static final String JSON = "-json";
+    public static final String USR_LOCAL_BIN_NPM = "/usr/local/bin/npm";
     public static final String AMD = "amd";
     public static final String COMMONJS = "commonjs";
     public static final String NONE = "none";
@@ -58,11 +64,11 @@ public final class RTRunner {
     //npm outdated react-templates -g -json
     public static Outdated npmOutdated(@NotNull String cwd, @NotNull String node) {
         try {
-            GeneralCommandLine commandLine = NodeRunner.createCommandLine(cwd, node, "/usr/local/bin/npm");
-            commandLine.addParameter("outdated");
-            commandLine.addParameter("react-templates");
-            commandLine.addParameter("-g");
-            commandLine.addParameter("-json");
+            GeneralCommandLine commandLine = NodeRunner.createCommandLine(cwd, node, USR_LOCAL_BIN_NPM);
+            commandLine.addParameter(OUTDATED);
+            commandLine.addParameter(REACT_TEMPLATES);
+            commandLine.addParameter(G);
+            commandLine.addParameter(JSON);
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
 
             String outputJSON = output.getStdout();
@@ -81,7 +87,7 @@ public final class RTRunner {
         Result result = new Result();
         try {
             GeneralCommandLine commandLine = RTCliBuilder.createCommandLineBuild(settings);
-            commandLine.addParameter("--force");
+            commandLine.addParameter(FORCE);
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {

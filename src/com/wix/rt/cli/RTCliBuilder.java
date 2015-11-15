@@ -16,6 +16,7 @@ final class RTCliBuilder {
     public static final String FORMAT = "--format";
     public static final String JSON = "json";
     public static final String LIST_TARGET_VERSION = "--list-target-version";
+    public static final String V = "-v";
 
     private RTCliBuilder() {
     }
@@ -32,7 +33,7 @@ final class RTCliBuilder {
     @NotNull
     static GeneralCommandLine version(@NotNull RTSettings settings) {
         GeneralCommandLine commandLine = createCommandLine(settings);
-        commandLine.addParameter("-v");
+        commandLine.addParameter(V);
         return commandLine;
     }
 
