@@ -7,7 +7,6 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.wix.rt.build.RTFileListener;
 import com.wix.rt.settings.Settings;
 import org.jetbrains.annotations.NotNull;

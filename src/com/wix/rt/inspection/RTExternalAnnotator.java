@@ -223,7 +223,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         }
         Project project = psiFile.getProject();
         RTProjectComponent component = project.getComponent(RTProjectComponent.class);
-        if (!component.isValidAndEnabled()) {
+        if (component == null || !component.isValidAndEnabled()) {
             return null;
         }
         Document document = PsiDocumentManager.getInstance(project).getDocument(psiFile);
@@ -248,7 +248,7 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
             PsiFile file = collectedInfo.psiFile;
             if (!RTFileUtil.isRTFile(file)) return null;
             RTProjectComponent component = file.getProject().getComponent(RTProjectComponent.class);
-            if (!component.isValidAndEnabled()) {
+            if (component == null || !component.isValidAndEnabled()) {
                 return null;
             }
 

@@ -54,9 +54,7 @@ public final class RTRunner {
             ProcessOutput output = RTRunner.convertFile(settings);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {
-            LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
-            e.printStackTrace();
+            handleError("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, e);
         }
         return result;
     }
@@ -92,9 +90,7 @@ public final class RTRunner {
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {
-            LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, NotificationType.WARNING);
-            e.printStackTrace();
+            handleError("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + cwd + "\ncommand: " + rtBin, e);
         }
         return result;
     }
@@ -110,9 +106,7 @@ public final class RTRunner {
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             return parseVersions(output.getStdout());
         } catch (ExecutionException e) {
-            LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
-            e.printStackTrace();
+            handleError("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, e);
         }
         return new ArrayList<String>();
     }
@@ -132,11 +126,15 @@ public final class RTRunner {
             ProcessOutput output = NodeRunner.execute(commandLine, TIME_OUT);
             result.warns = parse(output.getStdout());
         } catch (ExecutionException e) {
-            LOG.warn("Could not build react-templates file", e);
-            RTProjectComponent.showNotification("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, NotificationType.WARNING);
-            e.printStackTrace();
+            handleError("Error running React-Templates build: " + e.getMessage() + "\ncwd: " + settings.cwd + "\ncommand: " + settings.rtExecutablePath, e);
         }
         return result;
+    }
+
+    private static void handleError(String msg, Exception e) {
+        LOG.warn(msg, e);
+        RTProjectComponent.showNotification(msg, NotificationType.WARNING);
+        e.printStackTrace();
     }
 
     @NotNull

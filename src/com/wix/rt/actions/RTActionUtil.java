@@ -13,10 +13,10 @@ public final class RTActionUtil {
     }
 
     public static boolean isRTEnabled(Project project) {
-        if (project != null) {
-            RTProjectComponent conf = project.getComponent(RTProjectComponent.class);
-            return conf.isEnabled();
+        if (project == null) {
+            return false;
         }
-        return false;
+        RTProjectComponent conf = project.getComponent(RTProjectComponent.class);
+        return conf != null && conf.isEnabled();
     }
 }

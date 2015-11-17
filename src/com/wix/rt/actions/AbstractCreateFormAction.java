@@ -69,21 +69,14 @@ public abstract class AbstractCreateFormAction extends CreateElementActionBase i
     }
 
     protected String createFormBody(@Nullable String fqn, @NonNls String formName, String layoutManager) throws IncorrectOperationException {
-        String s = null;
+        String s = "";
         try {
             s = FileUtil.loadTextAndClose(getClass().getResourceAsStream(formName));
         } catch (IOException e) {
 //      throw new IncorrectOperationException(RTBundle.message("error.cannot.read", formName), (Throwable)e);
         }
-
-        if (fqn != null) {
-            s = StringUtil.replace(s, "$CLASS$", fqn);
-        } else {
-            s = StringUtil.replace(s, "bind-to-class=\"$CLASS$\"", "");
-        }
-
+        s = fqn == null ? StringUtil.replace(s, "bind-to-class=\"$CLASS$\"", "") : StringUtil.replace(s, "$CLASS$", fqn);
         s = StringUtil.replace(s, "$LAYOUT$", layoutManager);
-
         return StringUtil.convertLineSeparators(s);
     }
 

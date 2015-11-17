@@ -15,8 +15,7 @@ public class Outdated {
         GsonBuilder builder = new GsonBuilder();
 //        builder.registerTypeAdapterFactory(adapter);
         Gson g = builder.setPrettyPrinting().create();
-        Type listType = new TypeToken<Outdated>() {
-        }.getType();
+        Type listType = new TypeToken<Outdated>() {}.getType();
         return g.fromJson(json, listType);
     }
 
