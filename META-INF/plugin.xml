@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/idok/react-templates-plugin">
     <id>com.wix.react-templates</id>
     <name>React-Templates</name>
-    <version>1.0.27</version>
+    <version>1.0.28</version>
     <vendor email="sir_simon_x@yahoo.com" url="https://github.com/idok">Ido</vendor>
     <category>HTML/JavaScript Development</category>
     <description><![CDATA[
@@ -14,6 +14,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
+       <p>1.0.28 Fix other file grouping</p>
        <p>1.0.27 Support branch 143 - IntelliJ IDEA 15, WebStorm 11, PyCharm 5, PhpStorm 10, RubyMine 8, AppCode 3.3, CLion 1.2</p>
        <p>1.0.26 Fix NPE</p>
        <p>1.0.25 Fix NPE and add switch to controller/code behind file</p>

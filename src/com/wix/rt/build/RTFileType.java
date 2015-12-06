@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class RTFileType extends LanguageFileType {
+public final class RTFileType extends LanguageFileType {
     public static final RTFileType INSTANCE = new RTFileType();
     public static final String RT_EXT = "rt";
 

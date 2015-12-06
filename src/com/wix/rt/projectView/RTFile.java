@@ -123,8 +123,11 @@ public class RTFile implements Navigatable {
 //                return false;
 //            }
 //        }
-        boolean controllerValid = controller == null || controller.isValid();
-        return rtFile.isValid() && rtJSFile.isValid() && controllerValid;
+        return rtFile.isValid() && isValid(rtJSFile) && isValid(controller);
+    }
+
+    private static boolean isValid(PsiFile controller) {
+        return controller == null || controller.isValid();
     }
 
     public boolean containsFile(final VirtualFile vFile) {

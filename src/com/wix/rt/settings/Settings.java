@@ -48,6 +48,6 @@ public class Settings implements PersistentStateComponent<Settings> {
     }
 
     public String getVersion() {
-        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController + targetVersion + reactNative + watchAndCompileRT;
+        return nodeInterpreter + rtExecutable + builtinRulesPath + modules + groupController + groupOther + targetVersion + reactNative + watchAndCompileRT;
     }
 }

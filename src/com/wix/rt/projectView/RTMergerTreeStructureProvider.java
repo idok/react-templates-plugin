@@ -20,6 +20,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
+import com.wix.rt.projectViewK.RTMergerTreeStructureProviderK2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,11 +46,15 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         return false;
     }
 
+    private static boolean hasExt(VirtualFile file, String ext) {
+        return file != null && file.getExtension() != null && file.getExtension().equals(ext);
+    }
+
     private static boolean hasJsExt(VirtualFile file) {
-        return file != null && file.getExtension() != null && file.getExtension().equals("js");
+        return hasExt(file, "js");
     }
     private static boolean hasTsExt(VirtualFile file) {
-        return file != null && file.getExtension() != null && file.getExtension().equals("ts");
+        return hasExt(file, "ts");
     }
 
     private static Map<String, ProjectViewNode> map(ProjectViewNode[] copy) {
@@ -67,14 +72,6 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         return comp.settings.groupController;
     }
 
-    //BGR: Not used
-//    private static String getJSControllerName( String rtName ) {
-//        return rtName.substring(0, rtName.length() - 2) + "js";
-//    }
-//    private static String getTSControllerName( String rtName ) {
-//        return rtName.substring(0, rtName.length() - 2) + "ts";
-//    }
-
     public static String getJSControllerName(VirtualFile rtFile) {
         return rtFile.getNameWithoutExtension() + ".js";
     }
@@ -83,8 +80,18 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         return rtFile.getNameWithoutExtension() + ".ts";
     }
 
+    @SuppressWarnings("rawtypes")
     @NotNull
     public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
+        //ProjectViewNode[] copy = children.toArray(new ProjectViewNode[children.size()]);
+        AbstractTreeNode[] arr2 = children.toArray(new AbstractTreeNode[children.size()]);
+        //noinspection unchecked
+        Collection<AbstractTreeNode<?>> r = RTMergerTreeStructureProviderK2.INSTANCE.modify22(project, parent, arr2, settings);
+        return new LinkedHashSet<AbstractTreeNode>(r);
+    }
+
+    @NotNull
+    public Collection<AbstractTreeNode> modify2(@NotNull AbstractTreeNode parent, @NotNull Collection<AbstractTreeNode> children, ViewSettings settings) {
         if (!RTProjectComponent.isEnabled(parent.getProject())) {
             return children;
         }

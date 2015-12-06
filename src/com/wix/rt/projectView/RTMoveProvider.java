@@ -53,7 +53,7 @@ public class RTMoveProvider extends MoveHandlerDelegate {
     public void collectFilesOrDirsFromContext(DataContext dataContext, Set<PsiElement> filesOrDirs) {
         RTFile[] rtFiles = RTFile.DATA_KEY.getData(dataContext);
         LOG.assertTrue(rtFiles != null);
-        if (rtFiles == null || rtFiles.length == 0) return;
+        if (rtFiles.length == 0) return;
         PsiFile[] jsToMove = new PsiFile[rtFiles.length];
         PsiFile[] filesToMove = new PsiFile[rtFiles.length];
         PsiFile[] controllersToMove = new PsiFile[rtFiles.length];
@@ -73,10 +73,9 @@ public class RTMoveProvider extends MoveHandlerDelegate {
         }
     }
 
-
     @Override
     public boolean isMoveRedundant(PsiElement source, PsiElement target) {
-        if (source instanceof PsiFile && source.getParent() == target) {
+        if (source instanceof PsiFile && source.getParent().equals(target)) {
             final VirtualFile virtualFile = ((PsiFile) source).getVirtualFile();
             if (RTFileUtil.isRTFile(virtualFile)) {
                 return true;

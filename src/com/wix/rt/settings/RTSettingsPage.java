@@ -284,6 +284,7 @@ public class RTSettingsPage implements Configurable {
                 !areEqual(rtBinField, s.rtExecutable) ||
                 !getModules().equals(s.modules) ||
                 !areEqual(groupController, s.groupController) ||
+                !areEqual(groupOtherFilesCheckBox, s.groupOther) ||
                 !areEqual(watchAndCompileRtCheckBox, s.watchAndCompileRT) ||
                 !areEqual(reactNativeCheckBox, s.reactNative) ||
                 !areEqual(comboBoxTargetVersion, s.targetVersion) ||
@@ -304,6 +305,7 @@ public class RTSettingsPage implements Configurable {
         settings.nodeInterpreter = nodeInterpreterField.getChildComponent().getText();
         settings.modules = getModules();
         settings.groupController = groupController.isSelected();
+        settings.groupOther = groupOtherFilesCheckBox.isSelected();
         settings.reactNative = reactNativeCheckBox.isSelected();
         settings.groupOther = groupOtherFilesCheckBox.isSelected();
         settings.watchAndCompileRT = watchAndCompileRtCheckBox.isSelected();
