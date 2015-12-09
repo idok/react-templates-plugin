@@ -1,4 +1,4 @@
-package com.wix.rt.projectViewK
+package com.wix.rtk.projectView
 
 import com.intellij.openapi.actionSystem.DataKey
 import com.intellij.openapi.vfs.VirtualFile

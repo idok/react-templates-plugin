@@ -1,4 +1,4 @@
-package com.wix.rt.projectViewK
+package com.wix.rtk.projectView
 
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.projectView.ProjectViewNode
@@ -39,27 +39,13 @@ class RTNode(project: Project, value: RTFile, viewSettings: ViewSettings, privat
         value.navigate(requestFocus)
     }
 
-    override fun canNavigate(): Boolean {
-        return value != null && value.canNavigate()
-    }
+    override fun canNavigate(): Boolean = value?.canNavigate() ?: false
 
-    override fun canNavigateToSource(): Boolean {
-        return value != null && value.canNavigateToSource()
-    }
+    override fun canNavigateToSource(): Boolean = value?.canNavigateToSource() ?: false
 
-    public override fun getToolTip(): String {
-        return "React Templates"
-    }
+    public override fun getToolTip(): String = "React Templates"
 
-    override fun getFileStatus(): FileStatus {
-        val statutes = children.filterNot { it.isValid }.map { NavigationItemFileStatus.get(it) }
-        for (fileStatus in statutes) {
-            if (fileStatus != FileStatus.NOT_CHANGED) {
-                return fileStatus
-            }
-        }
-        return FileStatus.NOT_CHANGED
-    }
+    override fun getFileStatus(): FileStatus = children.filter { it.isValid }.map { NavigationItemFileStatus.get(it) }.find { it != FileStatus.NOT_CHANGED } ?: FileStatus.NOT_CHANGED
 
     override fun canHaveChildrenMatching(condition: Condition<PsiFile>?): Boolean = children.any { condition!!.value(it.value.containingFile) }
 

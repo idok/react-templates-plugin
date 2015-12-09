@@ -94,7 +94,7 @@ public class CreateRTAction extends AbstractCreateFormAction {
     private static String getControllerTemplate(String name, String modules) {
         String s = "";
         try {
-            String tplName = RTRunner.TYPESCRIPT.equals(modules) ? "/fileTemplates/internal/RT Controller File typescript.ts.ft" : "/fileTemplates/internal/RT Controller File " + modules + ".js.ft";
+            String tplName = "/fileTemplates/internal/RT Controller File " + (RTRunner.TYPESCRIPT.equals(modules) ? "typescript.ts.ft" : modules + ".js.ft");
             s = FileUtil.loadTextAndClose(CreateRTAction.class.getResourceAsStream(tplName));
             s = StringUtil.replace(s, "$name$", name);
         } catch (IOException e) {

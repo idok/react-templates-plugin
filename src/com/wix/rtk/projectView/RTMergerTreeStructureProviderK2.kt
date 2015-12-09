@@ -1,6 +1,5 @@
-package com.wix.rt.projectViewK
+package com.wix.rtk.projectView
 
-import com.intellij.ide.projectView.ProjectViewNode
 import com.intellij.ide.projectView.ViewSettings
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode
@@ -25,17 +24,14 @@ object RTMergerTreeStructureProviderK2 {
 
     private fun hasRTFiles(children: Collection<AbstractTreeNode<*>>): Boolean = children.any { it is PsiFileNode && it.value is PsiFile && it.value.name.endsWith(".rt") }
 
-    fun modify22(project: Project, parent: AbstractTreeNode<*>, children: Array<AbstractTreeNode<Any>>, settings: ViewSettings): Collection<AbstractTreeNode<*>> {
-        return modify(project, parent, children.asList(), settings)
-    }
-
+    fun modify22(project: Project, parent: AbstractTreeNode<*>, children: Array<AbstractTreeNode<Any>>, settings: ViewSettings): Collection<AbstractTreeNode<*>> =
+            modify(project, parent, children.asList(), settings)
 
     fun defaultSettings() = Settings()
 
-    fun getSettings(project: Project):Settings {
+    fun getSettings(project: Project): Settings {
         val comp = project.getComponent(RTProjectComponent::class.java)
         return comp?.settings ?: defaultSettings()
-//        return comp?.settings ?: defaultSettings()
     }
 
     fun modify(project: Project, parent: AbstractTreeNode<*>, children: Collection<AbstractTreeNode<*>>, settings: ViewSettings): Collection<AbstractTreeNode<*>> {
@@ -46,9 +42,6 @@ object RTMergerTreeStructureProviderK2 {
         if (parent is RTNode || parent.value is RTFile) {
             return children
         }
-//        val comp = project.getComponent(RTProjectComponent::class.java)
-//        val groupOther = comp?.settings?.groupOther ?: false
-//        val groupController = comp?.settings?.groupController ?: false
 
         // Optimization. Check if there are any RT files at all.
         val formsFound = hasRTFiles(children)
@@ -69,12 +62,14 @@ object RTMergerTreeStructureProviderK2 {
             }
         }
 
-        val toRemove = ArrayList<AbstractTreeNode<*>>()
+        fun fff(node: AbstractTreeNode<*>, file: VirtualFile?) = node is PsiFileNode && node.value is PsiFile && node.value.name == getSassName(file)
+
+        // val toRemove = ArrayList<AbstractTreeNode<*>>()
         // remove all rt files and files with the same name
         fun f(it: AbstractTreeNode<*>): RTNode {
-            val name = toPsiFile(it)?.name
+            //            val name = toPsiFile(it)?.name
             val file = toPsiFile(it)?.virtualFile
-            val nameNoExt = toPsiFile(it)?.virtualFile?.nameWithoutExtension
+            //            val nameNoExt = toPsiFile(it)?.virtualFile?.nameWithoutExtension
             val subNodes = ArrayList<BasePsiNode<out PsiFile>>()
             subNodes.add(it as BasePsiNode<out PsiFile>)
             result.remove(it)

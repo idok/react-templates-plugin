@@ -20,7 +20,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
-import com.wix.rt.projectViewK.RTMergerTreeStructureProviderK2;
+import com.wix.rtk.projectView.RTMergerTreeStructureProviderK2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -13,7 +13,7 @@ public class Outdated {
 
     public static Outdated parseNpmOutdated(String json) {
         GsonBuilder builder = new GsonBuilder();
-//        builder.registerTypeAdapterFactory(adapter);
+        // builder.registerTypeAdapterFactory(adapter);
         Gson g = builder.setPrettyPrinting().create();
         Type listType = new TypeToken<Outdated>() {}.getType();
         return g.fromJson(json, listType);
