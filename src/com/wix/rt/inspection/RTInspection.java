@@ -11,7 +11,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ex.SingleConfigurableEditor;
-import com.intellij.openapi.options.newEditor.OptionsEditor;
+//import com.intellij.openapi.options.newEditor.OptionsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -94,19 +94,19 @@ public class RTInspection extends LocalInspectionTool implements UnfairLocalInsp
         final HyperlinkLabel settingsLink = new HyperlinkLabel(title);
         settingsLink.addHyperlinkListener(new HyperlinkAdapter() {
             public void hyperlinkActivated(HyperlinkEvent e) {
-                DataContext dataContext = DataManager.getInstance().getDataContext(settingsLink);
-                OptionsEditor optionsEditor = OptionsEditor.KEY.getData(dataContext);
-                if (optionsEditor == null) {
-                    Project project = CommonDataKeys.PROJECT.getData(dataContext);
-                    if (project != null) {
-                        showSettings(project);
-                    }
-                    return;
-                }
-                Configurable configurable = optionsEditor.findConfigurableById(RTInspection.this.getId());
-                if (configurable != null) {
-                    optionsEditor.clearSearchAndSelect(configurable);
-                }
+//                DataContext dataContext = DataManager.getInstance().getDataContext(settingsLink);
+//                OptionsEditor optionsEditor = OptionsEditor.KEY.getData(dataContext);
+//                if (optionsEditor == null) {
+//                    Project project = CommonDataKeys.PROJECT.getData(dataContext);
+//                    if (project != null) {
+//                        showSettings(project);
+//                    }
+//                    return;
+//                }
+//                Configurable configurable = optionsEditor.findConfigurableById(RTInspection.this.getId());
+//                if (configurable != null) {
+//                    optionsEditor.clearSearchAndSelect(configurable);
+//                }
             }
         });
         return settingsLink;

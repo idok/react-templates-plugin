@@ -30,10 +30,10 @@ import com.wix.annotator.InspectionUtil;
 import com.wix.rt.RTBundle;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
-import com.wix.rt.build.Result;
+import com.wix.rtk.cli.Result;
 import com.wix.rt.build.VerifyMessage;
-import com.wix.rt.cli.RTRunner;
-import com.wix.rt.cli.RTSettings;
+import com.wix.rtk.cli.RTRunner;
+import com.wix.rtk.cli.RTSettings;
 import com.wix.utils.Delayer;
 import com.wix.utils.FileUtils;
 import com.wix.utils.PsiUtil;
@@ -105,11 +105,11 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         if (document == null) {
             return;
         }
-        if (annotationResult.result == null || annotationResult.result.warns == null) {
+        if (annotationResult.result == null || annotationResult.result.getWarns() == null) {
             LOG.warn("annotationResult.result == null");
             return;
         }
-        for (VerifyMessage warn : annotationResult.result.warns) {
+        for (VerifyMessage warn : annotationResult.result.getWarns()) {
             TextAttributes forcedTextAttributes = InspectionUtil.getTextAttributes(colorsScheme, severityRegistrar, severity);
             /*Annotation annotation = */
             severity = getHighlightSeverity(warn, false);
@@ -258,11 +258,11 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
                 return null;
             }
             relativeFile = FileUtils.makeRelative(new File(file.getProject().getBasePath()), actualCodeFile.getActualFile());
-            RTSettings settings = RTSettings.build(component.settings, file.getProject().getBasePath(), relativeFile);
-            Result result = RTRunner.compile(settings);
+            RTSettings settings = RTSettings.buildSettings(component.settings, file.getProject().getBasePath(), relativeFile);
+            Result result = RTRunner.INSTANCE.compile(settings);
 
-            if (StringUtils.isNotEmpty(result.errorOutput)) {
-                component.showInfoNotification(result.errorOutput, NotificationType.WARNING);
+            if (StringUtils.isNotEmpty(result.getErrorOutput())) {
+                component.showInfoNotification(result.getErrorOutput(), NotificationType.WARNING);
                 return null;
             }
             Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);

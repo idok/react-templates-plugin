@@ -19,10 +19,11 @@ import com.intellij.util.ui.UIUtil;
 import com.intellij.webcore.ui.SwingHelper;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.cli.RTFinder;
-import com.wix.rt.cli.RTRunner;
-import com.wix.rt.cli.RTSettings;
+import com.wix.rtk.cli.RTRunner;
+import com.wix.rtk.cli.RTSettings;
 import com.wix.settings.ValidationInfo;
 import com.wix.settings.ValidationUtils;
+import com.wix.settings.Validator;
 import com.wix.ui.PackagesNotificationPanel;
 import com.wix.utils.FileUtils;
 import org.jetbrains.annotations.Nls;
@@ -38,10 +39,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Exception;
+import static com.intellij.structuralsearch.impl.matcher.PatternTreeContext.File;
+import static org.mozilla.javascript.TopLevel.Builtins.String;
+
 public class RTSettingsPage implements Configurable {
-    public static final String FIX_IT = "Fix it";
-    public static final String HOW_TO_USE_RT = "How to Use React-Templates";
-    public static final String HOW_TO_USE_LINK = "https://github.com/wix/react-templates";
+    private static final String FIX_IT = "Fix it";
+    private static final String HOW_TO_USE_RT = "How to Use React-Templates";
+    private static final String HOW_TO_USE_LINK = "https://github.com/wix/react-templates";
     protected Project project;
 
     private JCheckBox pluginEnabledCheckbox;
@@ -68,6 +73,8 @@ public class RTSettingsPage implements Configurable {
     private JCheckBox watchAndCompileRtCheckBox;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
+//    private String
+
     public RTSettingsPage(@NotNull final Project project) {
         this.project = project;
         configRTBinField();
@@ -89,6 +96,8 @@ public class RTSettingsPage implements Configurable {
             }
         });
 
+//        System.out.println(String.format("", ""));
+
         this.packagesNotificationPanel = new PackagesNotificationPanel(project);
 //        GridConstraints gridConstraints = new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
 //                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -99,9 +108,31 @@ public class RTSettingsPage implements Configurable {
             protected void textChanged(DocumentEvent e) {
                 updateLaterInEDT();
             }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                super.changedUpdate(e);
+//                System.out.println("changedUpdate " + rtBinField.getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                super.insertUpdate(e);
+//                System.out.println("insertUpdate " + rtBinField.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+//                super.removeUpdate(e);
+//                e.getDocument().
+                System.out.println("removeUpdate " + rtBinField.getText());
+            }
         };
-        rtBinField.getChildComponent().getTextEditor().getDocument().addDocumentListener(docAdp);
-        nodeInterpreterField.getChildComponent().getTextEditor().getDocument().addDocumentListener(docAdp);
+
+//        rtBinField.getChildComponent().getTextEditor().getDocument().addDocumentListener(docAdp);
+//        nodeInterpreterField.getChildComponent().getTextEditor().getDocument().addDocumentListener(docAdp);
+        rtBinField.getChildComponent().addDocumentListener(docAdp);
+        nodeInterpreterField.getChildComponent().addDocumentListener(docAdp);
     }
 
     private File getProjectPath() {
@@ -157,10 +188,10 @@ public class RTSettingsPage implements Configurable {
         groupOtherFilesCheckBox.setEnabled(enabled);
     }
 
-    private void validateField(List<ValidationInfo> errors, TextFieldWithHistoryWithBrowseButton field, boolean allowEmpty, String message) {
+    private void validateField(Validator validator, TextFieldWithHistoryWithBrowseButton field, boolean allowEmpty, String message) {
         if (!ValidationUtils.validatePath(project, field.getChildComponent().getText(), allowEmpty)) {
             ValidationInfo error = new ValidationInfo(field.getChildComponent().getTextEditor(), message, FIX_IT);
-            errors.add(error);
+            validator.errors.add(error);
         }
     }
 
@@ -168,9 +199,9 @@ public class RTSettingsPage implements Configurable {
         if (!pluginEnabledCheckbox.isSelected()) {
             return;
         }
-        List<ValidationInfo> errors = new ArrayList<ValidationInfo>();
-        validateField(errors, rtBinField, false, "Path to react-templates is invalid {{LINK}}");
-        validateField(errors, nodeInterpreterField, false, "Path to node interpreter is invalid {{LINK}}");
+        Validator validator = new Validator();
+        validateField(validator, rtBinField, false, "Path to react-templates is invalid {{LINK}}");
+        validateField(validator, nodeInterpreterField, false, "Path to node interpreter is invalid {{LINK}}");
 //        if (!validateDirectory(customRulesPathField.getText(), true)) {
 //            RTValidationInfo error = new RTValidationInfo(customRulesPathField, "Path to custom rules is invalid {{LINK}}", FIX_IT);
 //            errors.add(error);
@@ -179,37 +210,43 @@ public class RTSettingsPage implements Configurable {
 //            RTValidationInfo error = new RTValidationInfo(rulesPathField.getChildComponent().getTextEditor(), "Path to rules is invalid {{LINK}}", FIX_IT);
 //            errors.add(error);
 //        }
-        if (errors.isEmpty()) {
+        if (validator.isEmpty()) {
             getVersion();
         }
-        packagesNotificationPanel.processErrors(errors);
+        packagesNotificationPanel.processErrors(validator);
     }
 
     private RTSettings settings;
 
     private void getVersion() {
         if (settings != null &&
-                areEqual(nodeInterpreterField, settings.node) &&
-                areEqual(rtBinField, settings.rtExecutablePath) &&
-                settings.cwd.equals(project.getBasePath())
+                areEqual(nodeInterpreterField, settings.getNode()) &&
+                areEqual(rtBinField, settings.getRtExe()) &&
+                settings.getCwd().equals(project.getBasePath())
                 ) {
             return;
         }
-        settings = new RTSettings();
-        settings.node = nodeInterpreterField.getChildComponent().getText();
-        settings.rtExecutablePath = rtBinField.getChildComponent().getText();
-        settings.cwd = project.getBasePath();
+        System.out.println(project.getBasePath());
+        String node = nodeInterpreterField.getChildComponent().getText();
+        String rtBin = rtBinField.getChildComponent().getText();
+
+        System.out.println("node: " + node + " rtBin: " + rtBin);
+
+        settings = RTSettings.Companion.buildVersion(project.getBasePath(), node, rtBin);
+//        settings.node = nodeInterpreterField.getChildComponent().getText();
+//        settings.rtExecutablePath = rtBinField.getChildComponent().getText();
+//        settings.cwd = project.getBasePath();
         try {
-            String version = RTRunner.runVersion(settings);
+            String version = RTRunner.INSTANCE.runVersion(settings);
             versionLabel.setText(version.trim());
 
-            List<String> versions = RTRunner.listTargetVersions(settings);
+            List<String> versions = RTRunner.INSTANCE.listTargetVersions(settings);
             String[] array = new String[versions.size()];
             comboBoxTargetVersion.setModel(new DefaultComboBoxModel<String>(versions.toArray(array)));
 //            for (String s : versions) {
 //                comboBoxTargetVersion.addItem(s);
 //            }
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -230,7 +267,7 @@ public class RTSettingsPage implements Configurable {
                 return FileUtils.toAbsolutePath(newFiles);
             }
         });
-        SwingHelper.installFileCompletionAndBrowseDialog(project, rtBinField, "Select React-Templates cli", FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor());
+        SwingHelper.installFileCompletionAndBrowseDialog(project, rtBinField, "Select React-Templates Cli", FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor());
     }
 
     private void configNodeField() {
@@ -242,7 +279,7 @@ public class RTSettingsPage implements Configurable {
                 return FileUtils.toAbsolutePath(newFiles);
             }
         });
-        SwingHelper.installFileCompletionAndBrowseDialog(project, nodeInterpreterField, "Select Node interpreter", FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor());
+        SwingHelper.installFileCompletionAndBrowseDialog(project, nodeInterpreterField, "Select Node Interpreter", FileChooserDescriptorFactory.createSingleFileNoJarsDescriptor());
     }
 
     @Nls

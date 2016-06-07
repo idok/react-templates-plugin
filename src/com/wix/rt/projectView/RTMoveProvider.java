@@ -19,11 +19,12 @@ package com.wix.rt.projectView;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.move.MoveHandlerDelegate;
 import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesHandler;
-import com.wix.rt.build.RTFileType;
 import com.wix.rt.build.RTFileUtil;
+import com.wix.rtk.projectView.RTFile;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -58,7 +59,7 @@ public class RTMoveProvider extends MoveHandlerDelegate {
         PsiFile[] filesToMove = new PsiFile[rtFiles.length];
         PsiFile[] controllersToMove = new PsiFile[rtFiles.length];
         for (int i = 0; i < rtFiles.length; i++) {
-            jsToMove[i] = rtFiles[i].getRTJSFile();
+            jsToMove[i] = rtFiles[i].getRtjsFile();
             if (jsToMove[i] != null) {
                 filesOrDirs.add(jsToMove[i].getContainingFile());
             }

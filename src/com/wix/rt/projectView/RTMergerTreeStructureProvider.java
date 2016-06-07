@@ -20,7 +20,9 @@ import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.containers.ContainerUtil;
 import com.wix.rt.RTProjectComponent;
 import com.wix.rt.build.RTFileUtil;
+import com.wix.rtk.projectView.RTFile;
 import com.wix.rtk.projectView.RTMergerTreeStructureProviderK2;
+import com.wix.rtk.projectView.RTNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -233,7 +235,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
         for (AbstractTreeNode node : selected) {
             if (node.getValue() instanceof RTFile) {
                 RTFile form = (RTFile) node.getValue();
-                result.add(form.getRTJSFile());
+                result.add(form.getRtjsFile());
                 if (form.getController() != null) {
                     result.add(form.getController());
                 }
@@ -286,7 +288,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
             for (AbstractTreeNode node : selected) {
                 if (node.getValue() instanceof RTFile) {
                     RTFile form = (RTFile) node.getValue();
-                    result.add(form.getRTJSFile());
+                    result.add(form.getRtjsFile());
                     if (form.getController() != null) {
                         result.add(form.getController());
                     }

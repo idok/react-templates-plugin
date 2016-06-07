@@ -86,9 +86,9 @@
         <defaultLiveTemplatesProvider implementation="com.wix.rt.RTTemplatesProvider"/>
         <!--<html.embeddedTokenTypesProvider implementation="com.wix.rt.RTEmbeddedTokenTypesProvider" />-->
 
-        <treeStructureProvider implementation="com.wix.rt.projectView.RTMergerTreeStructureProvider" />
+        <treeStructureProvider implementation="com.wix.rtk.projectView.RTMergerTreeStructureProvider" />
         <refactoring.moveHandler implementation="com.wix.rt.projectView.RTMoveProvider"/>
-        <renameHandler implementation="com.wix.rt.projectView.RTRenameHandler"/>
+        <renameHandler implementation="com.wix.rtk.projectView.RTRenameHandler"/>
 
         <lang.documentationProvider language="HTML" implementationClass="com.wix.rt.RTDocumentationProvider" />
         <!--<fileBasedIndex implementation="com.wix.rt.index.AngularDirectivesDocIndex"/>-->

@@ -84,13 +84,12 @@ public class RTDocumentationProvider extends DocumentationProviderEx {
 
     private static String getDoc(String tag) {
         // return RTBundle.message("doc." + name);
-        String s;
         try {
-            s = FileUtil.loadTextAndClose(RTDocumentationProvider.class.getResourceAsStream("/tagDescriptions/" + tag + ".html"));
+            String s = FileUtil.loadTextAndClose(RTDocumentationProvider.class.getResourceAsStream("/tagDescriptions/" + tag + ".html"));
+            return StringUtil.convertLineSeparators(s);
         } catch (IOException e) {
 //      throw new IncorrectOperationException(RTBundle.message("error.cannot.read", formName), (Throwable)e);
             return "null";
         }
-        return StringUtil.convertLineSeparators(s);
     }
 }

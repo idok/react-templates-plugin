@@ -7,14 +7,17 @@ import com.intellij.psi.PsiFile
 import com.intellij.refactoring.move.MoveHandlerDelegate
 import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesHandler
 import com.wix.rt.build.RTFileUtil
-import com.wix.rt.projectView.RTFile
 
 /**
  * @author yole
  */
 class RTMoveProvider : MoveHandlerDelegate() {
 
-    override fun canMove(dataContext: DataContext?): Boolean = RTFile.DATA_KEY.getData(dataContext!!)?.size ?: 0 > 0
+    override fun canMove(dataContext: DataContext?): Boolean {
+        val rtFiles = RTFile.DATA_KEY?.getData(dataContext!!)
+        return rtFiles != null && rtFiles.size > 0
+//        return RTFile.DATA_KEY.getData(dataContext!!)?.size ?: 0 > 0
+    }
 
     override fun isValidTarget(psiElement: PsiElement?, sources: Array<PsiElement>?): Boolean = MoveFilesOrDirectoriesHandler.isValidTarget(psiElement)
 

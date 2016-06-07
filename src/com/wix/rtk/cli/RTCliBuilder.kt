@@ -11,7 +11,7 @@ import java.util.*
  * build cli command for RT
  * Created by idok on 11/27/14.
  */
-internal object RTCliBuilderK {
+internal object RTCliBuilder {
     val MODULES = "--modules"
     val DRY_RUN = "--dry-run"
     val FORCE = "--force"
@@ -21,15 +21,15 @@ internal object RTCliBuilderK {
     val LIST_TARGET_VERSION = "--list-target-version"
     val V = "-v"
 
-    fun listVersions(settings: RTSettingsK): GeneralCommandLine =
+    fun listVersions(settings: RTSettings): GeneralCommandLine =
             CLI(settings.cwd, settings.node, settings.rtExe)
                     .param(LIST_TARGET_VERSION)
                     .param(FORMAT, JSON)
                     .command
 
-    fun version(settings: RTSettingsK): GeneralCommandLine = CLI(settings.cwd, settings.node, settings.rtExe).param(V).command
+    fun version(settings: RTSettings): GeneralCommandLine = CLI(settings.cwd, settings.node, settings.rtExe).param(V).command
 
-    fun createCommandLineBuild(settings: RTSettingsK): GeneralCommandLine =
+    fun createCommandLineBuild(settings: RTSettings): GeneralCommandLine =
             CLI(settings.cwd, settings.node, settings.rtExe)
                     .param(settings.targetFile)
                     .param(MODULES, settings.modules)
@@ -38,7 +38,7 @@ internal object RTCliBuilderK {
                     .param(FORMAT, JSON)
                     .command
 
-    fun createCommandLineValidate(settings: RTSettingsK): GeneralCommandLine =
+    fun createCommandLineValidate(settings: RTSettings): GeneralCommandLine =
             CLI(settings.cwd, settings.node, settings.rtExe)
                     .param(settings.targetFile)
                     .param(MODULES, settings.modules)
@@ -99,7 +99,7 @@ class CLI2(val cwd: String, val exe: String) {
         }
         commandLine.setWorkDirectory(cwd)
         //        if (SystemInfo.isWindows) {
-        commandLine.setExePath(exe)
+        commandLine.exePath = exe
         //        } else {
         //            if (!File(node).exists()) {
         //                throw IllegalArgumentException("path doesn't exist")
@@ -114,4 +114,13 @@ class CLI2(val cwd: String, val exe: String) {
  * RT result
  * Created by idok on 8/25/14.
  */
-class ResultK(val warns: List<VerifyMessage>, val errorOutput: String = "")
+class Result(val warns: List<VerifyMessage>, val errorOutput: String = "")
+
+//class VerifyMessage(var level: String = "", var msg: String = "", var file: String = "", var line: Int = 0, var column: Int = 0,
+//                    var index: Int = 0, var startOffset: Int = 0, var endOffset: Int = 0) {
+//    companion object {
+//        val WARN = "WARN"
+//        val ERROR = "ERROR"
+//        val INFO = "INFO"
+//    }
+//}

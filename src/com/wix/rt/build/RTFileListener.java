@@ -14,9 +14,10 @@ import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import com.wix.rt.RTProjectComponent;
-import com.wix.rt.cli.RTSettings;
+import com.wix.rtk.cli.RTSettings;
 import com.wix.rt.settings.Settings;
-import com.wix.rt.cli.RTRunner;
+import com.wix.rtk.cli.RTRunner;
+import com.wix.rtk.cli.Result;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class RTFileListener {
             public void run() {
                 try {
                     Settings settings = Settings.getInstance(project);
-                    RTSettings rtSettings = RTSettings.build(settings, project.getBasePath(), file.getPath());
+                    RTSettings rtSettings = RTSettings.buildSettings(settings, project.getBasePath(), file.getPath());
                     Result out = RTRunner.build(rtSettings);
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -114,7 +115,7 @@ public class RTFileListener {
                     public void run(@NotNull ProgressIndicator indicator) {
                         try {
                             Settings settings = Settings.getInstance(project);
-                            RTSettings rtSettings = RTSettings.build(settings, project.getBasePath(), file.getPath());
+                            RTSettings rtSettings = RTSettings.buildSettings(settings, project.getBasePath(), file.getPath());
                             Result out = RTRunner.build(rtSettings);
                             file.getParent().refresh(false, false);
                         } catch (Exception e1) {

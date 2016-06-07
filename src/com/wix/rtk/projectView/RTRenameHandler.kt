@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.refactoring.RefactoringActionHandlerFactory
 import com.intellij.refactoring.rename.RenameHandler
-import com.wix.rt.projectView.RTFile
 
 class RTRenameHandler : RenameHandler {
     override fun isAvailableOnDataContext(dataContext: DataContext): Boolean {
@@ -20,14 +19,14 @@ class RTRenameHandler : RenameHandler {
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?, dataContext: DataContext) {
         val rtFiles = RTFile.DATA_KEY.getData(dataContext)
         if (rtFiles == null || rtFiles.size != 1) return
-        val rtJsFile = rtFiles[0].rtjsFile
+//        val rtJsFile = rtFiles[0].rtjsFile
         val rtFile = rtFiles[0].rtFile
         RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, arrayOf<PsiElement>(rtFile), dataContext)
-        // if (rtJsFile != null) {
-        //     RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[]{rtFile}, dataContext);
-        // } else {
-        //     RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[]{rtJsFile}, dataContext);
-        // }
+//        if (rtJsFile != null) {
+//            RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[]{ rtFile }, dataContext);
+//        } else {
+//            RefactoringActionHandlerFactory.getInstance().createRenameHandler().invoke(project, new PsiElement[]{ rtJsFile }, dataContext);
+//        }
     }
 
     override fun invoke(project: Project, elements: Array<PsiElement>, dataContext: DataContext) {

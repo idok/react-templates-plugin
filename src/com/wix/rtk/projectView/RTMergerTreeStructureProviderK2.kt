@@ -14,11 +14,11 @@ import java.util.*
 
 object RTMergerTreeStructureProviderK2 {
 
-    //    private fun map(copy: Array<ProjectViewNode<Any>>): Map<String, ProjectViewNode<Any>> {
-    //        val rtJsFiles = hashMapOf<String, ProjectViewNode<Any>>()
-    //        copy.filter { isRTJS(it.virtualFile) }.forEach { rtJsFiles.put(it.virtualFile!!.name, it) }
-    //        return rtJsFiles
-    //    }
+    // private fun map(copy: Array<ProjectViewNode<Any>>): Map<String, ProjectViewNode<Any>> {
+    //     val rtJsFiles = hashMapOf<String, ProjectViewNode<Any>>()
+    //     copy.filter { isRTJS(it.virtualFile) }.forEach { rtJsFiles.put(it.virtualFile!!.name, it) }
+    //     return rtJsFiles
+    // }
 
     private fun isRTJS(file: VirtualFile?): Boolean = RTFileUtil.isRTJSFile(file) || hasJsExt(file) || hasTsExt(file)
 
@@ -91,7 +91,7 @@ object RTMergerTreeStructureProviderK2 {
                 }
             }
             val node = RTNode(project,
-                    RTFile(toPsiFile(it), toPsiFile(rtJs), toPsiFile(jsFile)),
+                    RTFile(toPsiFile(it)!!, toPsiFile(rtJs), toPsiFile(jsFile)),
                     settings,
                     subNodes
             )

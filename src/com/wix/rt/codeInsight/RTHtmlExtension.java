@@ -1,5 +1,6 @@
 package com.wix.rt.codeInsight;
 
+import com.google.common.base.Strings;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.html.HtmlTag;
@@ -71,7 +72,9 @@ public class RTHtmlExtension extends HtmlXmlExtension {
         List<String> importedTags = new ArrayList<String>();
         for (PsiElement elem : reqTags) {
             String as = ((HtmlTag) elem).getAttributeValue("as");
-            importedTags.add(as);
+            if (!Strings.isNullOrEmpty(as)) {
+                importedTags.add(as);
+            }
         }
         return importedTags;
     }

@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.wix.rt.build.RTFileListener;
 import com.wix.rt.build.RTFileUtil;
-import com.wix.rt.projectView.RTFile;
+import com.wix.rtk.projectView.RTFile;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -1,17 +1,14 @@
 package com.wix.rt.codeInsight;
 
-import com.intellij.codeInsight.completion.XmlTagInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-//import com.intellij.lang.javascript.index.JSNamedElementProxy;
 import com.intellij.psi.html.HtmlTag;
 import com.intellij.psi.impl.source.xml.XmlElementDescriptorProvider;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.xml.XmlElementDescriptor;
 import com.intellij.xml.XmlTagNameProvider;
-import com.intellij.xml.impl.schema.AnyXmlElementDescriptor;
 import com.wix.rt.RTProjectComponent;
+import com.wix.utils.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +43,6 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
     @Override
     public XmlElementDescriptor getDescriptor(XmlTag xmlTag) {
 //        System.out.println("getDescriptor " + xmlTag);
-
         if (!(xmlTag instanceof HtmlTag && RTProjectComponent.isEnabled(xmlTag.getProject()))) {
             return null;
         }
@@ -58,7 +54,7 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
         if (xmlTag.getContainingFile() instanceof XmlFile) {
             List<String> tags = RTHtmlExtension.loadImportedTags((XmlFile) xmlTag.getContainingFile(), xmlTag);
             for (String tag : tags) {
-                if (tag.equals(directiveName)) {
+                if (Strings.areEqual(tag, directiveName)) {
                     return new RTClassTagDescriptor(directiveName, xmlTag);
                 }
             }

@@ -38,11 +38,13 @@ public class RTParserDefinition extends JavascriptParserDefinition {
     @Override
     public PsiElement createElement(ASTNode node) {
         final IElementType type = node.getElementType();
-        if (type == RTElementTypes.REPEAT_EXPRESSION) {
+        if (type.equals(RTElementTypes.REPEAT_EXPRESSION)) {
             return new RTRepeatExpression(node);
-        } else if (type == RTElementTypes.FILTER_EXPRESSION) {
+        }
+        if (type.equals(RTElementTypes.FILTER_EXPRESSION)) {
             return new RTFilterExpression(node);
-        } else if (type == RTElementTypes.AS_EXPRESSION) {
+        }
+        if (type.equals(RTElementTypes.AS_EXPRESSION)) {
             return new RTAsExpression(node);
         }
         return super.createElement(node);

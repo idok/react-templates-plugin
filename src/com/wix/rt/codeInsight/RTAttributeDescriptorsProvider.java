@@ -18,7 +18,7 @@ public class RTAttributeDescriptorsProvider implements XmlAttributeDescriptorsPr
 
     @Override
     public XmlAttributeDescriptor[] getAttributeDescriptors(XmlTag xmlTag) {
-        if (xmlTag != null && xmlTag instanceof HtmlTag /*&& RTFileUtil.hasRTExt(xmlTag.getContainingFile())*/) {
+        if (xmlTag instanceof HtmlTag /*&& RTFileUtil.hasRTExt(xmlTag.getContainingFile())*/) {
             final Project project = xmlTag.getProject();
             if (RTActionUtil.isRTEnabled(project)) {
                 final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();

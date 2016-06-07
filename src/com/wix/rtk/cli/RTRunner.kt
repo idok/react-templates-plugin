@@ -1,6 +1,5 @@
 package com.wix.rtk.cli
 
-//import com.wix.rt.cli.Outdated
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.intellij.execution.ExecutionException
@@ -17,23 +16,24 @@ import java.util.concurrent.TimeUnit
 
 object RTRunner {
 
-    val FORCE = "--force"
-    val AMD = "amd"
-    val COMMONJS = "commonjs"
-    val NONE = "none"
-    val ES6 = "es6"
-    val TYPESCRIPT = "typescript"
+    const val FORCE = "--force"
+    const val AMD = "amd"
+    const val COMMONJS = "commonjs"
+    const val NONE = "none"
+    const val ES6 = "es6"
+    const val TYPESCRIPT = "typescript"
 
     private val LOG = Logger.getInstance(RTRunner::class.java)
 
-    public val TIME_OUT = TimeUnit.SECONDS.toMillis(120L).toInt()
+    val TIME_OUT = TimeUnit.SECONDS.toMillis(120L).toInt()
 
-    fun convertFile(settings: RTSettingsK): ProcessOutput {
-        val commandLine = RTCliBuilderK.createCommandLineBuild(settings)
+    fun convertFile(settings: RTSettings): ProcessOutput {
+        val commandLine = RTCliBuilder.createCommandLineBuild(settings)
         return NodeRunner.execute(commandLine, TIME_OUT)
     }
 
-    fun build(settings: RTSettingsK): ResultK {
+    @JvmStatic
+    fun build(settings: RTSettings): Result {
         val warns = try {
             val output = RTRunner.convertFile(settings)
             parse(output.stdout)
@@ -41,25 +41,26 @@ object RTRunner {
             handleError("Error running React-Templates build: ${e.message}\ncwd: ${settings.cwd}\ncommand: ${settings.rtExe}", e)
             emptyList<VerifyMessage>()
         }
-        return ResultK(warns)
+        return Result(warns)
     }
 
     //rt --list-target-version -f json
-    fun listVersion(cwd: String, node: String, rtBin: String): ResultK {
-        val settings = RTSettingsK.build(cwd, node, rtBin)
-        val commandLine = RTCliBuilderK.createCommandLineBuild(settings)
+    fun listVersion(cwd: String, node: String, rtBin: String): Result {
+        val settings = RTSettings.build(cwd, node, rtBin)
+        val commandLine = RTCliBuilder.createCommandLineBuild(settings)
         commandLine.addParameter(FORCE)
         val warns = run(settings, commandLine)
-        return ResultK(warns)
+        return Result(warns)
     }
 
+    @JvmStatic
     fun listTargetVersions(cwd: String, node: String, rtBin: String): List<String> {
-        val settings = RTSettingsK.build(cwd, node, rtBin)
+        val settings = RTSettings.build(cwd, node, rtBin)
         return listTargetVersions(settings)
     }
 
-    fun listTargetVersions(settings: RTSettingsK): List<String> = try {
-        val commandLine = RTCliBuilderK.listVersions(settings)
+    fun listTargetVersions(settings: RTSettings): List<String> = try {
+        val commandLine = RTCliBuilder.listVersions(settings)
         val output = NodeRunner.execute(commandLine, TIME_OUT)
         parseVersions(output.stdout)
     } catch (e: ExecutionException) {
@@ -71,17 +72,18 @@ object RTRunner {
         val builder = GsonBuilder()
         val g = builder.setPrettyPrinting().create()
         val listType = object : TypeToken<ArrayList<String>>() {}.type
-        return g.fromJson<List<String>>(json, listType)
+        val list = g.fromJson<List<String>>(json, listType)
+        return list ?: emptyList()
     }
 
-    fun compile(settings: RTSettingsK): ResultK {
+    fun compile(settings: RTSettings): Result {
         val settings2 = settings.copy(dryRun = true)
-        val commandLine = RTCliBuilderK.createCommandLineValidate(settings2)
+        val commandLine = RTCliBuilder.createCommandLineValidate(settings2)
         val warns = run(settings, commandLine)
-        return ResultK(warns)
+        return Result(warns)
     }
 
-    fun run(settings: RTSettingsK, commandLine: GeneralCommandLine): List<VerifyMessage> = try {
+    fun run(settings: RTSettings, commandLine: GeneralCommandLine): List<VerifyMessage> = try {
         val output = NodeRunner.execute(commandLine, TIME_OUT)
         parse(output.stdout)
     } catch (e: ExecutionException) {
@@ -95,12 +97,12 @@ object RTRunner {
         e.printStackTrace()
     }
 
-    private fun version(settings: RTSettingsK): ProcessOutput {
-        val commandLine = RTCliBuilderK.version(settings)
+    private fun version(settings: RTSettings): ProcessOutput {
+        val commandLine = RTCliBuilder.version(settings)
         return NodeRunner.execute(commandLine, TIME_OUT)
     }
 
-    fun runVersion(settings: RTSettingsK): String {
+    fun runVersion(settings: RTSettings): String {
         if (!File(settings.rtExe).exists()) {
             LOG.warn("Calling version with invalid react-templates exe ${settings.rtExe}")
             return ""
