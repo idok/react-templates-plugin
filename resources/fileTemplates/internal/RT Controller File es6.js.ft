@@ -1,0 +1,20 @@
+import React from 'react';
+import template from './$name$.rt';
+
+class Component extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    static propTypes:React.ValidationMap<Props> = {
+        //title: React.PropTypes.string
+    }
+    static defaultProps:Props = null //{ title: "Default Title"}
+
+    render() {
+        return template.apply(this)
+    }
+}
+
+export = Component
