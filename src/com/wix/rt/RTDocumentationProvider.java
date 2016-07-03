@@ -11,16 +11,9 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlTokenType;
-import com.intellij.xml.HtmlXmlExtension;
-import com.intellij.xml.util.documentation.XHtmlDocumentationProvider;
-import com.wix.rt.codeInsight.DirectiveUtil;
 //import com.wix.rt.index.AngularDirectivesDocIndex;
 //import com.wix.rt.index.AngularIndexUtil;
-import org.intellij.lang.regexp.psi.RegExpElement;
-import org.intellij.lang.regexp.psi.RegExpGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

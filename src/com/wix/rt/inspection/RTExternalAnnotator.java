@@ -247,7 +247,8 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
         try {
             PsiFile file = collectedInfo.psiFile;
             if (!RTFileUtil.isRTFile(file)) return null;
-            RTProjectComponent component = file.getProject().getComponent(RTProjectComponent.class);
+            Project project = file.getProject();
+            RTProjectComponent component = project.getComponent(RTProjectComponent.class);
             if (component == null || !component.isValidAndEnabled()) {
                 return null;
             }
@@ -257,15 +258,15 @@ public class RTExternalAnnotator extends ExternalAnnotator<ExternalLintAnnotatio
             if (actualCodeFile == null || actualCodeFile.getActualFile() == null) {
                 return null;
             }
-            relativeFile = FileUtils.makeRelative(new File(file.getProject().getBasePath()), actualCodeFile.getActualFile());
-            RTSettings settings = RTSettings.buildSettings(component.settings, file.getProject().getBasePath(), relativeFile);
+            relativeFile = FileUtils.makeRelative(new File(project.getBasePath()), actualCodeFile.getActualFile());
+            RTSettings settings = RTSettings.buildSettings(component.settings, project.getBasePath(), relativeFile);
             Result result = RTRunner.INSTANCE.compile(settings);
 
             if (StringUtils.isNotEmpty(result.getErrorOutput())) {
                 component.showInfoNotification(result.getErrorOutput(), NotificationType.WARNING);
                 return null;
             }
-            Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
+            Document document = PsiDocumentManager.getInstance(project).getDocument(file);
             if (document == null) {
                 component.showInfoNotification("Error running RT inspection: Could not get document for file " + file.getName(), NotificationType.WARNING);
                 LOG.error("Could not get document for file " + file.getName());

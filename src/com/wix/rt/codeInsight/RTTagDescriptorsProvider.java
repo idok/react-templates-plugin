@@ -20,6 +20,10 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
     public static final String AS = "as";
     public static final String DEPENDENCY = "dependency";
 
+    public static final String RT_IMPORT = "rt-import";
+    public static final String NAME = "name";
+    public static final String FROM = "from";
+
     @Override
     public void addTagNameVariants(final List<LookupElement> elements, @NotNull XmlTag xmlTag, String prefix) {
 //        System.out.println("");
@@ -49,6 +53,9 @@ public class RTTagDescriptorsProvider implements XmlElementDescriptorProvider, X
         final String directiveName = DirectiveUtil.normalizeAttributeName(xmlTag.getName());
         if (directiveName.equals(RT_REQUIRE)) {
             return new RTRequireTagDescriptor(RT_REQUIRE, xmlTag);
+        }
+        if (directiveName.equals(RT_IMPORT)) {
+            return new RTImportTagDescriptor(RT_IMPORT, xmlTag);
         }
 
         if (xmlTag.getContainingFile() instanceof XmlFile) {

@@ -28,7 +28,8 @@ public class RTRepeatExpression extends JSExpressionImpl {
         final PsiElement firstChild = getFirstChild();
         if (firstChild instanceof JSDefinitionExpression) {
             return Collections.singletonList((JSDefinitionExpression) firstChild);
-        } else if (firstChild instanceof JSParenthesizedExpression) {
+        }
+        if (firstChild instanceof JSParenthesizedExpression) {
             final PsiElement commaExpression = PsiTreeUtil.findChildOfType(firstChild, JSCommaExpression.class);
             if (commaExpression != null) {
                 return PsiTreeUtil.findChildrenOfType(commaExpression, JSDefinitionExpression.class);

@@ -1,8 +1,6 @@
 package com.wix.rt.codeInsight;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.xml.XmlElement;
-import com.intellij.xml.XmlAttributeDescriptor;
 import com.intellij.xml.impl.BasicXmlAttributeDescriptor;
 import com.intellij.xml.impl.XmlAttributeDescriptorEx;
 import org.jetbrains.annotations.NonNls;

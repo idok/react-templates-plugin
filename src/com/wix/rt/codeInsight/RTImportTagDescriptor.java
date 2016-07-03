@@ -1,28 +1,32 @@
 package com.wix.rt.codeInsight;
 
+import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.xml.XmlDocumentImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.XmlAttributeDescriptor;
 import com.intellij.xml.XmlElementDescriptor;
 import com.intellij.xml.XmlElementsGroup;
 import com.intellij.xml.XmlNSDescriptor;
-import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
- * rt-require tag descriptor
+ * rt-import tag descriptor
  */
-public class RTClassTagDescriptor implements XmlElementDescriptor {
+public class RTImportTagDescriptor implements XmlElementDescriptor {
 
     private final String name;
     private final PsiElement psiElement;
 
-    public RTClassTagDescriptor(String name, PsiElement psiElement) {
+    public RTImportTagDescriptor(String name, PsiElement psiElement) {
         this.name = name;
         this.psiElement = psiElement;
     }
@@ -74,12 +78,13 @@ public class RTClassTagDescriptor implements XmlElementDescriptor {
     @Override
     public XmlAttributeDescriptor[] getAttributesDescriptors(@Nullable XmlTag context) {
         // final Project project = xmlTag.getProject();
-//        final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();
-//        result.put(RTTagDescriptorsProvider.DEPENDENCY, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.DEPENDENCY));
-//        result.put(RTTagDescriptorsProvider.AS, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.AS));
+        final Map<String, XmlAttributeDescriptor> result = new LinkedHashMap<String, XmlAttributeDescriptor>();
+        result.put(RTTagDescriptorsProvider.NAME, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.NAME));
+        result.put(RTTagDescriptorsProvider.AS, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.AS));
+        result.put(RTTagDescriptorsProvider.FROM, new RTXmlAttributeDescriptor2(RTTagDescriptorsProvider.FROM));
         // <rt-require dependency="./CodeMirrorEditor" as="CodeEditor"/>
-//        return result.values().toArray(new XmlAttributeDescriptor[result.size()]);
-        return new XmlAttributeDescriptor[0];
+        return result.values().toArray(new XmlAttributeDescriptor[result.size()]);
+        // return new XmlAttributeDescriptor[0];
     }
 
     @Nullable
@@ -91,13 +96,12 @@ public class RTClassTagDescriptor implements XmlElementDescriptor {
     @Nullable
     @Override
     public XmlAttributeDescriptor getAttributeDescriptor(@NonNls final String attributeName, @Nullable XmlTag context) {
-        return new AnyXmlAttributeDescriptor(attributeName);
-//        return ContainerUtil.find(getAttributesDescriptors(context), new Condition<XmlAttributeDescriptor>() {
-//            @Override
-//            public boolean value(XmlAttributeDescriptor descriptor) {
-//                return attributeName.equals(descriptor.getName());
-//            }
-//        });
+        return ContainerUtil.find(getAttributesDescriptors(context), new Condition<XmlAttributeDescriptor>() {
+            @Override
+            public boolean value(XmlAttributeDescriptor descriptor) {
+                return attributeName.equals(descriptor.getName());
+            }
+        });
     }
 
     @Override

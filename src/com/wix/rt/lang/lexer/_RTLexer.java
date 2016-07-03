@@ -16,6 +16,7 @@ import static com.intellij.psi.TokenType.WHITE_SPACE;
  * on 4/20/15 8:27 PM from the specification file
  * <tt>/Users/idok/Projects/react-templates-plugin/src/com/wix/rt/lang/lexer/reactTemplates.flex</tt>
  */
+@SuppressWarnings("ALL")
 class _RTLexer implements FlexLexer {
   /** initial size of the lookahead buffer */
   private static final int ZZ_BUFFERSIZE = 16384;

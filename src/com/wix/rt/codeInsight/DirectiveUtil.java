@@ -2,15 +2,19 @@ package com.wix.rt.codeInsight;
 
 import com.intellij.openapi.util.text.StringUtil;
 
+import java.util.regex.Pattern;
+
 /**
 * @author Dennis.Ushakov
 */
 public final class DirectiveUtil {
+    private static final Pattern COMPILE = Pattern.compile("(?=[A-Z])");
+
     private DirectiveUtil() {
     }
 
     public static String getAttributeName(final String text) {
-        final String[] split = StringUtil.unquoteString(text).split("(?=[A-Z])");
+        final String[] split = COMPILE.split(StringUtil.unquoteString(text));
         for (int i = 0; i < split.length; i++) {
             split[i] = StringUtil.decapitalize(split[i]);
         }

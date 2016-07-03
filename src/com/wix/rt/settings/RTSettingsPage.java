@@ -1,7 +1,6 @@
 package com.wix.rt.settings;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.execution.ExecutionException;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.javascript.nodejs.NodeDetectionUtil;
 import com.intellij.openapi.application.ApplicationManager;
@@ -36,18 +35,12 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.intellij.icons.AllIcons.Debugger.ThreadStates.Exception;
-import static com.intellij.structuralsearch.impl.matcher.PatternTreeContext.File;
-import static org.mozilla.javascript.TopLevel.Builtins.String;
 
 public class RTSettingsPage implements Configurable {
     private static final String FIX_IT = "Fix it";
     private static final String HOW_TO_USE_RT = "How to Use React-Templates";
     private static final String HOW_TO_USE_LINK = "https://github.com/wix/react-templates";
-    protected Project project;
 
     private JCheckBox pluginEnabledCheckbox;
     private JPanel panel;
@@ -73,10 +66,12 @@ public class RTSettingsPage implements Configurable {
     private JCheckBox watchAndCompileRtCheckBox;
     private final PackagesNotificationPanel packagesNotificationPanel;
 
-//    private String
+    protected final Project project;
+    private final String basePath;
 
     public RTSettingsPage(@NotNull final Project project) {
         this.project = project;
+        basePath = project.getBasePath();
         configRTBinField();
         configNodeField();
         pluginEnabledCheckbox.addItemListener(new ItemListener() {
@@ -136,7 +131,7 @@ public class RTSettingsPage implements Configurable {
     }
 
     private File getProjectPath() {
-        return new File(project.getBaseDir().getPath());
+        return new File(basePath);
     }
 
     private void updateLaterInEDT() {
@@ -222,20 +217,20 @@ public class RTSettingsPage implements Configurable {
         if (settings != null &&
                 areEqual(nodeInterpreterField, settings.getNode()) &&
                 areEqual(rtBinField, settings.getRtExe()) &&
-                settings.getCwd().equals(project.getBasePath())
+                settings.getCwd().equals(basePath)
                 ) {
             return;
         }
-        System.out.println(project.getBasePath());
+        System.out.println(basePath);
         String node = nodeInterpreterField.getChildComponent().getText();
         String rtBin = rtBinField.getChildComponent().getText();
 
         System.out.println("node: " + node + " rtBin: " + rtBin);
 
-        settings = RTSettings.Companion.buildVersion(project.getBasePath(), node, rtBin);
+        settings = RTSettings.Companion.buildVersion(basePath, node, rtBin);
 //        settings.node = nodeInterpreterField.getChildComponent().getText();
 //        settings.rtExecutablePath = rtBinField.getChildComponent().getText();
-//        settings.cwd = project.getBasePath();
+//        settings.cwd = basePath;
         try {
             String version = RTRunner.INSTANCE.runVersion(settings);
             versionLabel.setText(version.trim());
@@ -351,7 +346,7 @@ public class RTSettingsPage implements Configurable {
         DaemonCodeAnalyzer.getInstance(project).restart();
     }
 
-    protected void loadSettings() {
+    private void loadSettings() {
         Settings settings = getSettings();
         pluginEnabledCheckbox.setSelected(settings.pluginEnabled);
         rtBinField.getChildComponent().setText(settings.rtExecutable);

@@ -258,7 +258,7 @@ public class RTMergerTreeStructureProvider implements SelectableTreeStructurePro
     private static Collection<BasePsiNode<? extends PsiElement>> findFormsIn(Collection<AbstractTreeNode> children, List<PsiFile> forms) {
         if (children.isEmpty() || forms.isEmpty()) return Collections.emptyList();
         List<BasePsiNode<? extends PsiElement>> result = new ArrayList<BasePsiNode<? extends PsiElement>>();
-        HashSet<PsiFile> psiFiles = new HashSet<PsiFile>(forms);
+        Set<PsiFile> psiFiles = new HashSet<PsiFile>(forms);
         for (final AbstractTreeNode child : children) {
             if (child instanceof BasePsiNode) {
                 //noinspection unchecked

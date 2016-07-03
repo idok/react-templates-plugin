@@ -8,7 +8,6 @@ import com.intellij.xml.XmlAttributeDescriptor;
 import com.intellij.xml.XmlAttributeDescriptorsProvider;
 import com.intellij.xml.impl.schema.AnyXmlAttributeDescriptor;
 import com.wix.rt.actions.RTActionUtil;
-import com.wix.rt.build.RTFileUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;

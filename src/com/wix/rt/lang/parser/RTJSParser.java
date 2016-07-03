@@ -163,11 +163,11 @@ public class RTJSParser extends JavaScriptParser<RTJSParser.RTExpressionParser, 
             } else {
                 final PsiBuilder.Marker keyValue = builder.mark();
                 parseKeyValue();
-                if (builder.getTokenType() != JSTokenTypes.IN_KEYWORD) {
+                if (JSTokenTypes.IN_KEYWORD.equals(builder.getTokenType())) {
+                    keyValue.done(JSElementTypes.PARENTHESIZED_EXPRESSION);
+                } else {
                     expr.rollbackTo();
                     return false;
-                } else {
-                    keyValue.done(JSElementTypes.PARENTHESIZED_EXPRESSION);
                 }
             }
             builder.advanceLexer();

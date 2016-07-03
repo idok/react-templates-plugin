@@ -3,7 +3,6 @@ package com.wix.rt.editor;
 import com.intellij.lang.injection.MultiHostInjector;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.lang.javascript.JSTargetedInjector;
-import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -19,7 +18,6 @@ import com.wix.rt.codeInsight.DirectiveUtil;
 import com.wix.rt.codeInsight.RTAttributes;
 import com.wix.rt.lang.RTLanguage;
 import org.jetbrains.annotations.NotNull;
-import sun.plugin2.message.JavaScriptBaseMessage;
 
 import java.util.Arrays;
 import java.util.List;

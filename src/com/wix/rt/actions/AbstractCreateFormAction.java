@@ -16,16 +16,11 @@
 
 package com.wix.rt.actions;
 
-import com.intellij.ide.IdeView;
 import com.intellij.ide.actions.CreateElementActionBase;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 //import com.intellij.psi.JavaDirectoryService;
@@ -34,7 +29,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.wix.rt.RTBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -49,7 +43,7 @@ public abstract class AbstractCreateFormAction extends CreateElementActionBase i
 
     public void update(final AnActionEvent e) {
         super.update(e);
-        final Project project = e.getData(CommonDataKeys.PROJECT);
+//        final Project project = e.getData(CommonDataKeys.PROJECT);
 //        final Presentation presentation = e.getPresentation();
 //        if (presentation.isEnabled()) {
 //            final IdeView view = e.getData(LangDataKeys.IDE_VIEW);

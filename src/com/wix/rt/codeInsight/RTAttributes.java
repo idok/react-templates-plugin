@@ -13,7 +13,7 @@ public final class RTAttributes {
 
     //https://facebook.github.io/react/docs/special-non-dom-attributes.html
     public static final String[] REACT_ATTRIBUTES = {"ref", "key", "dangerouslySetInnerHTML", "valueLink", "className"};
-    public static final String[] ATTRIBUTES = {"rt-repeat", "rt-if", "rt-scope", "rt-class", "rt-props"};
+    public static final String[] ATTRIBUTES = {"rt-repeat", "rt-if", "rt-scope", "rt-class", "rt-props", "rt-stateless"};
     public static final String[] ALL_ATTRIBUTES = (String[]) ArrayUtils.addAll(ATTRIBUTES, REACT_ATTRIBUTES);
 
     private RTAttributes() {

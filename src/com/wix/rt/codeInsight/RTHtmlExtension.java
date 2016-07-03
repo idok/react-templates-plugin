@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RTHtmlExtension extends HtmlXmlExtension {
+
+    private static final String NS = "http://www.w3.org/1999/html";
+
     @Override
     public boolean isAvailable(PsiFile file) {
         return super.isAvailable(file) && RTActionUtil.isRTEnabled(file.getProject());
@@ -45,10 +48,11 @@ public class RTHtmlExtension extends HtmlXmlExtension {
     @Override
     public List<TagInfo> getAvailableTagNames(@NotNull XmlFile file, @NotNull XmlTag context) {
         List<TagInfo> list = super.getAvailableTagNames(file, context);
-        list.add(new TagInfo(RTTagDescriptorsProvider.RT_REQUIRE, "http://www.w3.org/1999/html"));
+        list.add(new TagInfo(RTTagDescriptorsProvider.RT_REQUIRE, NS));
+        list.add(new TagInfo(RTTagDescriptorsProvider.RT_IMPORT, NS));
         List<String> importedTags = loadImportedTags(file, context);
         for (String importedTag : importedTags) {
-            list.add(new TagInfo(importedTag, "http://www.w3.org/1999/html") {
+            list.add(new TagInfo(importedTag, NS) {
                 @Nullable
                 @Override
                 public PsiElement getDeclaration() {
@@ -65,7 +69,7 @@ public class RTHtmlExtension extends HtmlXmlExtension {
         PsiElement[] reqTags = PsiTreeUtil.collectElements(file, new PsiElementFilter() {
             @Override
             public boolean isAccepted(PsiElement element) {
-                return element instanceof HtmlTag && ((HtmlTag) element).getName().equals(RTTagDescriptorsProvider.RT_REQUIRE);
+                return element instanceof HtmlTag && (((HtmlTag) element).getName().equals(RTTagDescriptorsProvider.RT_REQUIRE) || ((HtmlTag) element).getName().equals(RTTagDescriptorsProvider.RT_IMPORT));
             }
         });
 
