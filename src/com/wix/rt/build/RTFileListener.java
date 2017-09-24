@@ -3,6 +3,7 @@ package com.wix.rt.build;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -27,6 +28,7 @@ public class RTFileListener {
     private final Project project;
     private final AtomicBoolean LISTENING = new AtomicBoolean(false);
     private RTFileVfsListener listener;
+    private static final Logger LOG = Logger.getInstance(RTFileListener.class);
 
     public RTFileListener(@NotNull Project project) {
         this.project = project;
@@ -70,7 +72,11 @@ public class RTFileListener {
 
     public static void stop(@NotNull Project project) {
         RTFileListener listener = ServiceManager.getService(project, RTFileListener.class);
-        listener.stopListener();
+        if (listener == null) {
+            LOG.warn("failed to stop RTFileListener");
+        } else {
+            listener.stopListener();
+        }
     }
 
     private void fileChanged(@NotNull VirtualFile file) {
